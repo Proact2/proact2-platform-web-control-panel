@@ -1,0 +1,116 @@
+﻿@model Proact_WebApp.Models.LexiconModel
+
+@{
+    ViewData["Title"] = Model.Name + " - Validate";
+}
+
+
+<div class="row">
+    <div class="col-8">
+        @foreach (var category in Model.Categories)
+        {
+
+            <div class="row">
+                <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title"> @category.Name</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="ItemsTable" class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th style="width: 200px">
+                                        @Html.DisplayNameFor(model => model.Categories[0].Labels[0].GroupName)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Categories[0].Labels[0].Label)
+                                    </th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in category.Labels)
+                                {
+                                    <tr>
+                                        <td>
+                                            <h6><span class="badge" style="background-color: @item.BgGroupColor; color: @item.TextGroupColor">@item.GroupName</span></h6>
+                                        </td>
+                                        <td>
+                                            @item.Label
+                                        </td>
+
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                </div>
+            </div>
+
+        }
+    </div>
+
+    <div class="col-4">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Action</h3>
+            </div>
+
+            <div class="card-body">
+
+                @if (Model.State == LexiconState.DRAW)
+                {
+                    <div class="alert alert-warning">
+                        <h5><i class="icon fas fa-exclamation-triangle"></i> Check that everything is ok before validating!</h5>
+                        Check that the items are correct.
+                        After validation it will no longer be possible to make changes to the Lexicon.
+                    </div>
+                    <form method="post" asp-action="Validate">
+                        <div class="row m-2">
+                            <input type="hidden" name="id" value="@Model.Id" />
+                            <button type="submit" class="col-12 btn btn-success"><i class="fas fa-check"></i> Validate</button>
+                        </div>
+                    </form>
+                }
+                else
+                {
+                    <div class="alert alert-success">
+                        <h5><i class="icon fas fa-check"></i> Vaidated!</h5>
+                        this lexicon has already been validated
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+
+    <!-- DataTables  & Plugins -->
+    <script src="~/lib/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/lib/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/lib/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/lib/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="~/lib/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/lib/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/lib/jszip/jszip.min.js"></script>
+    <script src="~/lib/pdfmake/pdfmake.min.js"></script>
+    <script src="~/lib/pdfmake/vfs_fonts.js"></script>
+    <script src="~/lib/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/lib/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="~/lib/datatables-buttons/js/buttons.colVis.min.js"></script>
+
+    <script>$(function () {
+            $(".table").DataTable({
+                "responsive": true, "lengthChange": false, "autoWidth": false,
+                "buttons": ["excel", "pdf", "print", "colvis"]
+            }).buttons().container().appendTo('#UsersTable_wrapper .col-md-6:eq(0)');
+        });</script>
+
+}

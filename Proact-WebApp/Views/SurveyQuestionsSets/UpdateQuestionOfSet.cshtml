@@ -1,0 +1,347 @@
+﻿@model Proact_WebApp.ViewModels.SurveyUpdateQuestionOfSetViewModel
+@{
+    ViewData["Title"] = "Update question";
+}
+<form asp-action="UpdateQuestionOfSet" method="post" id="updateForm" class="form-horizontal">
+
+    <div class="row">
+
+        <div class="col-md-6">
+            <div class="card card-info">
+                <div class="card-header">
+                    <h3 class="card-title">Question info</h3>
+                </div>
+                <div class="card-body">
+
+                    <input type="hidden" asp-for="QuestionSetId" />
+                    <input type="hidden" asp-for="QuestionId" />
+                    <div class="form-group row">
+                        <label asp-for="Type" class="col-sm-2 col-form-label"></label>
+                        <div class="col-sm-10">
+                            <select id="questionTypeSelect"
+                                    asp-for="Type"
+                                    asp-items="Html.GetEnumSelectList<SurveyQuestionType>()"
+                                    class="form-control"
+                                    style="width: 100%;">
+                                <option selected="selected" value="">Please select</option>
+                            </select>
+                            <span asp-validation-for="Type" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label asp-for="Title" class="col-sm-2 col-form-label"></label>
+                        <div class="col-sm-10">
+                            <input asp-for="Title" class="form-control">
+                            <span asp-validation-for="Title" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label asp-for="Question" class="col-sm-2 col-form-label"></label>
+                        <div class="col-sm-10">
+                            <input asp-for="Question" class="form-control">
+                            <span asp-validation-for="Question" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div id="RatingSettingsBox" class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Rating question params</h3>
+                        </div>
+
+                        <div class="card-body">
+
+                            <div class="form-group row">
+                                <label asp-for="RatingQuestionParams.MinValue" class="col-sm-2 col-form-label"></label>
+                                <div class="col-sm-10">
+                                    <input data-rule-smaller_than="[name='RatingQuestionParams.MaxValue']"
+                                           data-msg-smaller_than="Min value must be smaller than max value"
+                                           type="number" value="1" min="1" asp-for="RatingQuestionParams.MinValue" class="form-control">
+                                    <span asp-validation-for="RatingQuestionParams.MinValue" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label asp-for="RatingQuestionParams.MaxValue" class="col-sm-2 col-form-label"></label>
+                                <div class="col-sm-10">
+                                    <input type="number" value="2" min="2"
+                                           asp-for="RatingQuestionParams.MaxValue" class="form-control">
+                                    <span asp-validation-for="RatingQuestionParams.MaxValue" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label asp-for="RatingQuestionParams.MinLabel" class="col-sm-2 col-form-label"></label>
+                                <div class="col-sm-10">
+                                    <input asp-for="RatingQuestionParams.MinLabel" class="form-control">
+                                    <span asp-validation-for="RatingQuestionParams.MinLabel" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label asp-for="RatingQuestionParams.MaxLabel" class="col-sm-2 col-form-label"></label>
+                                <div class="col-sm-10">
+                                    <input asp-for="RatingQuestionParams.MaxLabel" class="form-control">
+                                    <span asp-validation-for="RatingQuestionParams.MaxLabel" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="AnswersBox" class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Answers</h3>
+                            <a class="btn btn-success float-right"
+                               data-toggle="modal"
+                               data-target="#modal-default"><i class="fas fa-plus"></i> New Answers set</a>
+
+                        </div>
+
+                        <div class="card-body">
+
+                            <div class="form-group row">
+                                <select asp-for="SelectedAnswersBlockId"
+                                        asp-items="@(new SelectList(Model.AnswersBlocks, nameof(SurveyAnswersBlockModel.Id ), nameof(SurveyAnswersBlockModel.FullAnswers)))"
+                                        class="form-control selectAnswerBlock"
+                                        style="width: 100%;">
+                                    <option selected="selected" value="">Please select</option>
+                                </select>
+                                <span asp-validation-for="RatingQuestionParams.MinValue" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-success float-right">Update</button>
+                    <a asp-action="QuestionsList" asp-route-id="@Model.QuestionSetId" class="btn btn-default float-left">Back</a>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="modal fade" id="modal-default">
+            <div class="modal-dialog">
+                @using (Html.BeginForm( "SaveAnswers", "SurveyQuestionsSets", FormMethod.Post))
+                {
+                    <input type="hidden" id="answerBlockProjectId" value="@Model.ProjectId" />
+
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Create new questions set</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Answer 1</label>
+                                <div class="col-sm-10">
+                                    <input id="answer1" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Answer 2</label>
+                                <div class="col-sm-10">
+                                    <input id="answer2" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Answer 3</label>
+                                <div class="col-sm-10">
+                                    <input id="answer3" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Answer 4</label>
+                                <div class="col-sm-10">
+                                    <input id="answer4" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Answer 5</label>
+                                <div class="col-sm-10">
+                                    <input id="answer5" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Answer 6</label>
+                                <div class="col-sm-10">
+                                    <input id="answer6" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Answer 7</label>
+                                <div class="col-sm-10">
+                                    <input id="answer7" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Answer 8</label>
+                                <div class="col-sm-10">
+                                    <input id="answer8" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Answer 9</label>
+                                <div class="col-sm-10">
+                                    <input id="answer9" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Answer 10</label>
+                                <div class="col-sm-10">
+                                    <input id="answer10" class="form-control">
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <input type="button" id="BtnSaveAnswers" value="Create" class="btn btn-primary" />
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+</form>
+@section Scripts {
+
+    <!-- jquery-validation -->
+    <script src="~/lib/jquery-validation/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation/additional-methods.min.js"></script>
+    <!-- Toast -->
+    <script src="~/lib/sweetalert2/sweetalert2.min.js"></script>
+    <script src="~/lib/toastr/toastr.min.js"></script>
+
+    <script>$(function () {
+            $.validator.addMethod('smaller_than', function (value, element, param) {
+                return +$(element).val() < +$(param).val();
+            });
+
+            $('#updateForm').validate({
+                rules: {
+                    Question: {
+                        required: true
+                    },
+                    Type: {
+                        required: true
+                    },
+                },
+                messages: {
+                    Title: {
+                        required: "Required field"
+                    },
+                    Description: {
+                        required: "Required field"
+                    }
+                },
+                errorElement: 'span',
+                errorPlacement: function (error, element) {
+                    error.addClass('invalid-feedback');
+                    element.closest('.form-group').append(error);
+                },
+                highlight: function (element, errorClass, validClass) {
+                    $(element).addClass('is-invalid');
+                },
+                unhighlight: function (element, errorClass, validClass) {
+                    $(element).removeClass('is-invalid');
+                }
+            });
+        });</script>
+
+    <script>$(document).ready(function () {
+            $("#questionTypeSelect").change(function () {
+                $(this).find("option:selected").each(function () {
+                    var optionValue = $(this).attr("value");
+
+                    if (optionValue == 1 || optionValue == 2) {
+                        $("#AnswersBox").show();
+                        $("#RatingSettingsBox").hide();
+                    } else if (optionValue == 4) {
+                        $("#RatingSettingsBox").show();
+                        $("#AnswersBox").hide();
+                    }
+                    else {
+                        $("#AnswersBox").hide();
+                        $("#RatingSettingsBox").hide();
+                    }
+                });
+            }).change();
+        });</script>
+
+    <script type="text/javascript">$(function () {
+
+            var Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                width:300,
+                timer: 5000
+            });
+
+            $("#BtnSaveAnswers").click(function () {
+
+                var selectAnswerBlock = $('.selectAnswerBlock');
+
+                $.post("/SurveyQuestionsSets/SaveAnswers",
+                    {
+                        answers: [$( "#answer1" ).val(),
+                            $( "#answer2" ).val(),
+                            $( "#answer3" ).val(),
+                            $( "#answer4" ).val(),
+                            $( "#answer5" ).val(),
+                            $( "#answer6" ).val(),
+                            $( "#answer7" ).val(),
+                            $( "#answer8" ).val(),
+                            $( "#answer9" ).val(),
+                            $( "#answer10" ).val()
+                        ],
+
+                        projectId: $("#answerBlockProjectId").val()
+                    },
+                    function (response) {
+
+                        if (response != false) {
+                            var jsonResponse = JSON.stringify(response);
+
+                            const jsonObj = JSON.parse(jsonResponse);
+                            const id = jsonObj.id;
+                            const fullAnswers = jsonObj.fullAnswers;
+
+                            var option = new Option(jsonObj.fullAnswers, jsonObj.id, true, true);
+                            selectAnswerBlock.append(option).trigger('change');
+
+                            $('#modal-default').modal('hide');
+
+                            Toast.fire({
+                                icon: 'success',
+                                title: 'Questions sets successfully added.'
+                            });
+
+                        
+                        }
+                        else {
+                            Toast.fire({
+                                icon: 'error',
+                                title: 'An error has occurred, please try again.'
+                            })
+                        }
+                    }
+                );
+            });
+        });</script>
+}

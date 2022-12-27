@@ -1,0 +1,214 @@
+﻿@using Proact_WebApp.Resources;
+@model IEnumerable<Proact_WebApp.Models.LexiconModel>
+@{
+    ViewData["Title"] = "Lexicons";
+ 
+}
+<p>
+    <div class="row">
+        <div class="col-6"></div>
+        <div class="col-4">
+            <div class="btn-group float-right">
+                <button type="button" class="btn btn-info">Download Template</button>
+                <button type="button" class="btn btn-info dropdown-toggle dropdown-icon" data-toggle="dropdown">
+                    <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <div class="dropdown-menu" role="menu">
+                    <a href="@GlobalResources.proctcaeLexiconUrl" download
+                       data-placement="top" title="PRO-CTCAE"
+                       class="dropdown-item tooltip_button">PRO-CTCAE</a>
+
+                    <a href="@GlobalResources.ctcaev5LexiconUrl" download
+                       data-placement="top" title="CTCAE v5.0"
+                       class="dropdown-item tooltip_button">CTCAE v5.0</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-2">
+            <a class="btn btn-block btn-success" asp-action="Create"><i class="fas fa-plus"></i> Create New</a>
+        </div>
+    </div>
+</p>
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">All lexicons</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <table id="ItemsTable" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th style="width:80px">
+                                @Html.DisplayNameFor(model => model.State)
+                            </th>
+                            <th style="width:200px">
+                                @Html.DisplayNameFor(model => model.Id)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Name)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Description)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Created)
+                            </th>
+                            <th>
+                                Actions
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @if (item.State == LexiconState.PUBLISHED)
+                                    {
+                                        <span class="badge bg-success">VALIDATED</span>
+                                    }
+                                    else if (item.State == LexiconState.DRAW)
+                                    {
+                                        <span class="badge bg-warning">DRAW</span>
+                                    }
+                                </td>
+                                <td>
+                                    <small>@Html.DisplayFor(modelItem => item.Id)</small>
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Description)
+                                </td>
+                                <td>
+                                    <small>@Html.DisplayFor(modelItem => item.Created)</small>
+                                </td>
+                                <td>
+
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-info">Action</button>
+                                        <button type="button" class="btn btn-info dropdown-toggle dropdown-icon" data-toggle="dropdown">
+                                            <span class="sr-only">Toggle Dropdown</span>
+                                        </button>
+                                        <div class="dropdown-menu" role="menu">
+
+
+                                            @if (item.State == LexiconState.DRAW)
+                                            {
+                                                <a asp-action="Validate"
+                                                   asp-route-Id="@item.Id"
+                                                   data-placement="top" title="Validate"
+                                                   class="dropdown-item tooltip_button"><i class="fas fa-check"></i> Validate</a>
+                                            }
+                                            <a asp-action="Categories"
+                                               asp-route-Id="@item.Id"
+                                               data-placement="top" title="Categories"
+                                               class="dropdown-item tooltip_button"><i class="fas fa-list"></i> Categories</a>
+
+
+                                            @if (item.State == LexiconState.DRAW)
+                                            {
+                                                <div class="dropdown-divider"></div>
+                                                <a data-toggle="modal"
+                                                   data-target="#modal-default"
+                                                   class="deleteItem dropdown-item tooltip_button"
+                                                   data-placement="top" title="Delete"
+                                                   id="@item.Id"><i class="fas fa-trash"></i> Delete</a>
+                                            }
+
+
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.State)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Id)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Name)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Description)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Created)
+                            </th>
+                            <th>
+                                Actions
+                            </th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <!-- /.card-body -->
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-default">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Confirm lexicon delete</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Do you want to delete this Lexicon?</p>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                @using (Html.BeginForm("Delete", "Lexicons", FormMethod.Post))
+                {
+                    <input type="hidden" name="id" id="lexiconIdToDelete" />
+                    <button id="btnContinueDelete" type="submit" class="btn btn-danger">Delete</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+
+    <!-- DataTables  & Plugins -->
+    <script src="~/lib/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/lib/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/lib/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/lib/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="~/lib/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/lib/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/lib/jszip/jszip.min.js"></script>
+    <script src="~/lib/pdfmake/pdfmake.min.js"></script>
+    <script src="~/lib/pdfmake/vfs_fonts.js"></script>
+    <script src="~/lib/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/lib/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="~/lib/datatables-buttons/js/buttons.colVis.min.js"></script>
+
+    <script>$(function () {
+            $("#ItemsTable").DataTable({
+                "responsive": true,
+                "lengthChange": false,
+                "autoWidth": false,
+                "buttons": ["excel", "pdf", "print", "colvis"],
+                "order": [[4, "desc"]]
+            }).buttons().container().appendTo('#UsersTable_wrapper .col-md-6:eq(0)');
+        });</script>
+
+
+    <script>$('.deleteItem').click(function (e) {
+            var projectId = $(this).attr('id');
+            $('#lexiconIdToDelete').val(projectId);
+        });</script>
+}

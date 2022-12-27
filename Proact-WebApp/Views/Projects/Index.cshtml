@@ -1,0 +1,235 @@
+﻿@model IEnumerable<Proact_WebApp.Models.ProjectModel>
+
+@{
+    ViewData["Title"] = "Studies";
+    var openOnly = ViewBag.openOnly;
+}
+
+<div class="row mb-2">
+    <div class="col-10">
+        <form asp-action="Index" method="get" id="showAllForm">
+            <div class="form-check">
+                <input class="form-check-input"
+                       type="checkbox"
+                       id="showAll"
+                       name="ShowAll"
+                       checked="@(openOnly == false)" />
+                <label for="showAll" class="form-check-label">Show closed</label>
+            </div>
+        </form>
+    </div>
+    <div class="col-2">
+        <a class="btn btn-block btn-success" asp-action="Create"><i class="fas fa-plus"></i> Create New</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">All Studies</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <table id="UsersTable" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th style="width:100px">
+                                @Html.DisplayNameFor(model => model.Status)
+                            </th>
+                            <th style="width:200px">
+                                @Html.DisplayNameFor(model => model.ProjectId)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Name)
+                            </th>
+
+                            <th>
+                                Lexicon
+                            </th>
+                            <th style="width:150px">
+                                Actions
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @if (item.Status == ProjectState.Open)
+                                    {
+                                        <span class="badge bg-success">  @Html.DisplayFor(modelItem => item.Status)</span>
+                                    }
+                                    else if (item.Status == ProjectState.Closed)
+                                    {
+                                        <span class="badge bg-danger">  @Html.DisplayFor(modelItem => item.Status)</span>
+                                    }
+                                </td>
+                                <td>
+                                    <small>@Html.DisplayFor(modelItem => item.ProjectId)</small>
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td>
+                                    @if (item.Properties.Lexicon != null)
+                                    {
+                                        @Html.DisplayFor(modelItem => item.Properties.Lexicon.Name)
+                                    }
+                                    else
+                                    {
+                                        <span>No Lexicon associated</span>
+                                        <a class="btn btn-block btn-outline-primary btn-xs"
+                                           asp-controller="Projects"
+                                           asp-action="AssociateLexicon"
+                                           asp-route-id="@item.ProjectId">
+                                            Associate a Lexicon
+                                        </a>
+                                    }
+                                </td>
+                                <td>
+
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-default">Action</button>
+                                        <button type="button" class="btn btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown">
+                                            <span class="sr-only">Toggle Dropdown</span>
+                                        </button>
+                                        <div class="dropdown-menu" role="menu">
+                                            <a class="dropdown-item"
+                                               asp-controller="Projects"
+                                               asp-action="Update"
+                                               asp-route-id="@item.ProjectId">
+                                                Edit
+                                            </a>
+                                            <a class="dropdown-item"
+                                               asp-controller="Projects"
+                                               asp-action="Properties"
+                                               asp-route-id="@item.ProjectId">
+                                                Properties
+                                            </a>
+                                            @if (item.Status == ProjectState.Open)
+                                            {
+
+                                                <a data-toggle="modal"
+                                                   data-target="#modal-close"
+                                                   class="closeItem dropdown-item tooltip_button"
+                                                   data-placement="top" title="Close"
+                                                   id="@item.ProjectId"> Close</a>
+                                            }
+                                            else
+                                            {
+                                                <a data-toggle="modal"
+                                                   data-target="#modal-open"
+                                                   class="openItem dropdown-item tooltip_button"
+                                                   data-placement="top" title="Open"
+                                                   id="@item.ProjectId"> Open</a>
+
+                                            }
+
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+
+                </table>
+            </div>
+            <!-- /.card-body -->
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-close">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Confirm</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Do you want to close this Study?</p>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                @using (Html.BeginForm("Close", "Projects", FormMethod.Post))
+                {
+                    <input type="hidden" name="projectId" id="projectIdToClose" />
+                    <button id="btnContinueDelete" type="submit" class="btn btn-danger">Close Study</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-open">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Confirm</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Do you want to open this Study?</p>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                @using (Html.BeginForm("Open", "Projects", FormMethod.Post))
+                {
+                    <input type="hidden" name="projectId" id="projectIdToOpen" />
+                    <button id="btnContinueDelete" type="submit" class="btn btn-success">Open Study</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@section Scripts {
+
+    <!-- DataTables  & Plugins -->
+    <script src="~/lib/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/lib/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/lib/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/lib/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="~/lib/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/lib/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/lib/jszip/jszip.min.js"></script>
+    <script src="~/lib/pdfmake/pdfmake.min.js"></script>
+    <script src="~/lib/pdfmake/vfs_fonts.js"></script>
+    <script src="~/lib/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/lib/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="~/lib/datatables-buttons/js/buttons.colVis.min.js"></script>
+
+    <script>$(function () {
+            $("#UsersTable").DataTable({
+                "responsive": true,
+                "lengthChange": false,
+                "autoWidth": false,
+                "order": [[2, "asc"]],
+                "buttons": ["excel", "pdf", "print"]
+            }).buttons().container().appendTo('#UsersTable_wrapper .col-md-6:eq(0)');
+        });
+
+        $('#showAll').change(function () {
+            $('#showAllForm').submit();
+        });
+
+        $('.closeItem').click(function (e) {
+            var id = $(this).attr('id');
+            $('#projectIdToClose').val(id);
+        });
+
+        $('.openItem').click(function (e) {
+            var id = $(this).attr('id');
+            $('#projectIdToOpen').val(id);
+        });</script>
+
+}

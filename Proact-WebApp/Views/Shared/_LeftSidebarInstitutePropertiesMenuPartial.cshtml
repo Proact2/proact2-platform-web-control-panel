@@ -1,0 +1,20 @@
+﻿<li class="nav-header">INSTITUTE</li>
+
+<li class="nav-item">
+    <a asp-controller="TermsAndConditions"
+       asp-action="Index"
+       class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "TermsAndConditions" ? "active" : "")">
+        <i class="fas fa-file-contract nav-icon"></i>
+        <p>Terms & Conditions</p>
+    </a>
+</li>
+
+<li class="nav-item">
+    <a asp-controller="PrivacyPolicy"
+       asp-action="Index"
+       class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "PrivacyPolicy" ? "active" : "")">
+        <i class="fas fa-file-contract nav-icon"></i>
+        <p>Privacy policy</p>
+    </a>
+</li>
+

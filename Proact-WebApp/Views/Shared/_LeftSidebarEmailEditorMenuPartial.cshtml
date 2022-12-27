@@ -1,0 +1,34 @@
+﻿<li class="nav-header">EMAIL EDITOR</li>
+
+<li class="nav-item">
+    <a asp-controller="EmailEditor"
+       asp-action="UpdateWelcome"
+       asp-route-medicalTeamId=""
+       class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "EmailEditor"
+           &&  ViewContext.RouteData.Values["Action"]?.ToString() == "UpdateWelcome"  ? "active" : "")">
+        <i class="fas fa-envelope nav-icon"></i>
+        <p>User activated</p>
+    </a>
+</li>
+
+<li class="nav-item">
+    <a asp-controller="EmailEditor"
+       asp-action="UpdateUserSuspended"
+       asp-route-medicalTeamId=""
+       class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "EmailEditor"
+           &&  ViewContext.RouteData.Values["Action"]?.ToString() == "UpdateUserSuspended"  ? "active" : "")">
+        <i class="fas fa-envelope nav-icon"></i>
+        <p>User suspended</p>
+    </a>
+</li>
+
+<li class="nav-item">
+    <a asp-controller="EmailEditor"
+       asp-action="UpdateUserDeactivated"
+       asp-route-medicalTeamId=""
+       class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "EmailEditor"
+           &&  ViewContext.RouteData.Values["Action"]?.ToString() == "UpdateUserDeactivated"  ? "active" : "")">
+        <i class="fas fa-envelope nav-icon"></i>
+        <p>User deactivated</p>
+    </a>
+</li>

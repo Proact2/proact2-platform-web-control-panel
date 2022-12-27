@@ -1,0 +1,9 @@
+﻿@model SurveyState
+@if (Model == SurveyState.PUBLISHED)
+{
+<span class="badge bg-success">PUBLISHED</span>
+}
+else if (Model == SurveyState.DRAW)
+{
+    <span class="badge bg-warning">CREATE</span>
+}

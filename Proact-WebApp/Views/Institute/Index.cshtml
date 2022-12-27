@@ -1,0 +1,229 @@
+﻿@model IEnumerable<Proact_WebApp.Models.InstituteModel>
+
+@{
+    ViewData["Title"] = "Institutes";
+    var openOnly = ViewBag.openOnly;
+}
+
+<div class="row mb-2">
+    <div class="col-10">
+        <form asp-action="Index" method="get" id="showAllForm">
+            <div class="form-check">
+                <input class="form-check-input"
+                       type="checkbox"
+                       id="showAll"
+                       name="ShowAll"
+                       checked="@(openOnly == false)" />
+                <label for="showAll" class="form-check-label">Show closed</label>
+            </div>
+        </form>
+    </div>
+    <div class="col-2">
+        <a class="btn btn-block btn-success" asp-action="Create"><i class="fas fa-plus"></i> Create New</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">All Institutes</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <table id="InstituteTable" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th style="width:100px">
+                                @Html.DisplayNameFor(model => model.State)
+                            </th>
+                            <th style="width:200px">
+                                @Html.DisplayNameFor(model => model.Id)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Name)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Admins)
+                            </th>
+                            <th style="width:150px">
+                                Actions
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                        <tr>
+                            <td>
+                                @if (item.State == InstituteState.Open)
+                                {
+                                    <span class="badge bg-success">  @Html.DisplayFor(modelItem => item.State)</span>
+                                }
+                                else if (item.State == InstituteState.Closed)
+                                {
+                                    <span class="badge bg-danger">  @Html.DisplayFor(modelItem => item.State)</span>
+                                }
+                            </td>
+                            <td>
+                                <small>@Html.DisplayFor(modelItem => item.Id)</small>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+
+                            <td>
+                                @if ( item.Admins != null ) {
+                                    foreach ( var admin in item.Admins ) {
+                                        <div><small>@admin.Name</small></div>
+                                    }
+                                }
+                            </td>
+
+                            <td>
+
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default">Action</button>
+                                    <button type="button" class="btn btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown">
+                                        <span class="sr-only">Toggle Dropdown</span>
+                                    </button>
+                                    <div class="dropdown-menu" role="menu">
+                                        <a class="dropdown-item"
+                                           asp-controller="Institute"
+                                           asp-action="Update"
+                                           asp-route-id="@item.Id">
+                                            Edit
+                                        </a>
+
+                                        @if (item.State == InstituteState.Open)
+                                        {
+                                            <a class="dropdown-item"
+                                               asp-controller="Institute"
+                                               asp-action="AssociateAdmin"
+                                               asp-route-id="@item.Id">
+                                                Create Admin
+                                            </a>
+                                            <div class="dropdown-divider"></div>
+                                            <a data-toggle="modal"
+                                               data-target="#modal-close"
+                                               class="closeItem dropdown-item tooltip_button"
+                                               data-placement="top" title="Close"
+                                               id="@item.Id"> Close</a>
+                                        }
+                                        else
+                                        {
+                                            <div class="dropdown-divider"></div>
+                                            <a data-toggle="modal"
+                                               data-target="#modal-open"
+                                               class="openItem dropdown-item tooltip_button"
+                                               data-placement="top" title="Open"
+                                               id="@item.Id"> Open</a>
+
+                                        }
+
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+
+                </table>
+            </div>
+            <!-- /.card-body -->
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-close">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Confirm</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Do you want to close this Institute?</p>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                @using (Html.BeginForm("Close", "Institute", FormMethod.Post))
+                {
+                    <input type="hidden" name="instituteId" id="instituteIdToClose" />
+                    <button id="btnContinueDelete" type="submit" class="btn btn-danger">Close Institute</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-open">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Confirm</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Do you want to open this Institute?</p>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                @using (Html.BeginForm("Open", "Institute", FormMethod.Post))
+                {
+                    <input type="hidden" name="instituteId" id="instituteIdToOpen" />
+                    <button id="btnContinueDelete" type="submit" class="btn btn-success">Open Institute</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@section Scripts {
+
+    <!-- DataTables  & Plugins -->
+    <script src="~/lib/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/lib/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/lib/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/lib/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="~/lib/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/lib/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/lib/jszip/jszip.min.js"></script>
+    <script src="~/lib/pdfmake/pdfmake.min.js"></script>
+    <script src="~/lib/pdfmake/vfs_fonts.js"></script>
+    <script src="~/lib/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/lib/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="~/lib/datatables-buttons/js/buttons.colVis.min.js"></script>
+
+    <script>$(function () {
+            $("#InstituteTable").DataTable({
+                "responsive": true,
+                "lengthChange": false,
+                "autoWidth": false,
+                "order": [[2, "asc"]],
+                "buttons": ["excel", "pdf", "print"]
+            }).buttons().container().appendTo('#InstituteTable_wrapper .col-md-6:eq(0)');
+        });
+
+        $('#showAll').change(function () {
+            $('#showAllForm').submit();
+        });
+
+        $('.closeItem').click(function (e) {
+            var id = $(this).attr('id');
+            $('#instituteIdToClose').val(id);
+        });
+
+        $('.openItem').click(function (e) {
+            var id = $(this).attr('id');
+            $('#instituteIdToOpen').val(id);
+        });</script>
+
+}

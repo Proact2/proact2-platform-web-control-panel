@@ -1,0 +1,163 @@
+﻿@model Proact_WebApp.Models.SurveyStatsResume
+@{
+    ViewData["Title"] = "Survey statistics";
+
+    var modelSerialized = System.Text.Json.JsonSerializer
+        .Serialize(Model.QuestionsWithoutOpenAnswers);
+
+    var assignedSurveys = Model.Participants;
+    var completedSurveys = Model.Completed;
+    var incompletedSurveys = Model.Incompleted;
+    var index = 0;
+}
+
+<div class="row">
+    <div class="col-6">
+
+        @foreach (QuestionWithAnswers item in Model.QuestionsWithoutOpenAnswers)
+        {
+            <div class="card">
+                <div class="card-body">
+                    <div class="float-right">
+                        <span class="badge bg-info">@item.Type</span>
+                    </div>
+
+                    <h5>@item.Title</h5>
+                    <strong>@item.Question</strong>
+
+                    <canvas class="mt-3" id="@("donutChart"+index)"
+                            style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;">
+                    </canvas>
+
+                </div>
+            </div>
+            index++;
+        }
+
+        @if (Model.QuestionsWithoutOpenAnswers.Count == 0)
+        {
+            <div class="card">
+                <div class="card-body text-center">
+                    No survey completed
+                </div>
+            </div>
+        }
+
+    </div>
+
+    <div class="col-6">
+        <div class="card card-info">
+            <div class="card-header">
+                <h3 class="card-title">Survey info</h3>
+            </div>
+
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-4">Title</dt>
+                    <dd class="col-sm-8">@Model.Title</dd>
+                    <dt class="col-sm-4">Description</dt>
+                    <dd class="col-sm-8">@Model.Description</dd>
+                    <dt class="col-sm-4">Version</dt>
+                    <dd class="col-sm-8">@Model.Version</dd>
+                </dl>
+
+                <canvas class="mt-3" id="pieChart"
+                        style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;">
+                </canvas>
+            </div>
+
+            <div class="card-footer">
+                <a asp-action="Index"
+                   class="btn btn-default float-left">Back</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- ChartJS -->
+    <script src="~/lib/chart.js/Chart.min.js"></script>
+
+    <script>
+
+        $(function () {
+            showAnswerCharts('@modelSerialized')
+            showCompletedSurveysChart();
+        });
+
+
+        function showAnswerCharts(serializedQuestions) {
+            var epurateQuestions = serializedQuestions.replace(/&quot;/ig, '"');
+            var questions = JSON.parse(epurateQuestions);
+
+            var itemIndex = 0;
+            questions.forEach(item =>{
+
+                var donutChartCanvas = $('#donutChart' + itemIndex).get(0).getContext('2d')
+                var donutData = {
+                    labels: item.AswerValues,
+                    datasets: [
+                        {
+                            data: item.AswerCounts,
+                            backgroundColor: [
+                                '#00a65a',
+                                '#f56954',
+                                '#f39c12',
+                                '#00c0ef',
+                                '#3c8dbc',
+                                '#d2d6de',
+                                '#97a3eb',
+                                '#b3245a',
+                                '#670f8a',
+                                '#e03297',
+                                '#0b73dd',
+                                '#5cbb73']
+                        }
+                    ]
+                }
+                var donutOptions = {
+                    maintainAspectRatio: false,
+                    responsive: true,
+                }
+
+                new Chart(donutChartCanvas, {
+                    type: 'doughnut',
+                    data: donutData,
+                    options: donutOptions
+                })
+
+                itemIndex++;
+            });
+        }
+
+        function showCompletedSurveysChart() {
+            var completed = @completedSurveys;
+            var incompleted = @incompletedSurveys;
+            var assigned = @assignedSurveys;
+
+            var pieChartCanvas = $('#pieChart').get(0).getContext('2d')
+            var pietData = {
+                labels: ["Completed", "Not completed"],
+                datasets: [
+                    {
+                        data: [completed, incompleted],
+                        backgroundColor: [
+                            '#00a65a',
+                            '#f56954']
+                    }
+                ]
+            }
+            var pieOptions = {
+                maintainAspectRatio: false,
+                responsive: true,
+            }
+
+            new Chart(pieChartCanvas, {
+                type: 'pie',
+                data: pietData,
+                options: pieOptions
+            })
+        }
+
+    </script>
+}

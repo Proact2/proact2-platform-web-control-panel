@@ -1,0 +1,95 @@
+﻿@model Proact_WebApp.Models.SurveyQuestionSetModel
+@{
+    ViewData["Title"] = "Questions set validation";
+}
+<div class="row">
+    <div class="col-8">
+        <div class="card card">
+
+            <div class="card-body">
+
+                @foreach (var question in Model.Questions)
+                {
+                    <div class="callout callout-info">
+                        <div class="row m-2">
+                            <span class="badge bg-info">@question.Properties.Type</span>
+                        </div>
+
+                        <div class="row">
+                            <h4>@question.Title</h4>
+                        </div>
+
+                        <div class="row">
+                            <h5>@question.Question</h5>
+                        </div>
+
+                        <div>
+                            @if (question.Properties.Type == SurveyQuestionType.Mood)
+                            {
+                                <partial name="_surveysMoodQuestionDetailsPartial" />
+                            }
+                            else if (question.Properties.Type == SurveyQuestionType.Boolean)
+                            {
+                                <partial name="_surveysBoolQuestionDetailsPartial" />
+                            }
+                            else if (question.Properties.Type == SurveyQuestionType.SingleChoice)
+                            {
+                                var selectableAnswersContainer
+                                = (SurveysSingleChoiceQuestionModelAnswersContainer)question
+                                .AnswersContainer;
+
+                                <partial name="_surveysSingleChoiceQuestionDetailsPartial" model="selectableAnswersContainer" />
+                            }
+                            else if (question.Properties.Type == SurveyQuestionType.MultipleChoice)
+                            {
+                                var selectableAnswersContainer
+                                = (SurveysMultipleChoiceQuestionModelAnswersContainer)question
+                                .AnswersContainer;
+
+                                <partial name="_surveysMultipleChoiceQuestionDetailsPartial" model="selectableAnswersContainer" />
+                            }
+                            else if (question.Properties.Type == SurveyQuestionType.Rating)
+                            {
+                                var ratingProperties = (SurveysRatingQuestionModelProperties)question.Properties;
+                                <partial name="_surveysRatingQuestionDetailsPartial" model="ratingProperties" />
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Action</h3>
+            </div>
+
+            <div class="card-body">
+
+                @if ( Model.State == SurveyState.DRAW ) {
+                    <div class="alert alert-warning">
+                        <h5><i class="icon fas fa-exclamation-triangle"></i> Check that everything is ok before validating!</h5>
+                        Check that the questions are correct.
+                        After validation it will no longer be possible to make changes to the questions in the set.
+                    </div>
+                    <form method="post" asp-action="Validate">
+                        <div class="row m-2">
+                            <input type="hidden" name="id" value="@Model.Id" />
+                            <button type="submit" class="col-12 btn btn-success"><i class="fas fa-check"></i> Validate</button>
+                        </div>
+                    </form>
+                }
+                else {
+                    <div class="alert alert-success">
+                        <h5><i class="icon fas fa-check"></i> Vaidated!</h5>
+                        this question set has already been validated
+                    </div>
+                }
+
+
+            </div>
+        </div>
+    </div>
+</div>

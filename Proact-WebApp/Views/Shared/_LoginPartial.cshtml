@@ -1,0 +1,31 @@
+﻿@using Microsoft.Identity.Web
+@inject ISessionService sessionService;
+
+@if (User.Identity.IsAuthenticated)
+{
+
+    string avatarUrl = "";
+    @if (sessionService.IsSessionInitialized(Context.Session))
+    {
+        avatarUrl = sessionService.GetAdminAvatarUrl(Context.Session);
+    }
+
+    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+        <div class="image">
+            <img src="@avatarUrl" class="img-circle elevation-2 mt-2" alt="User Image">
+        </div>
+
+        <div class="info">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#" class="d-block">@User.Identity.Name</a></li>
+                <li><a class="btn btn-block btn-xs btn-danger text-white" asp-area="MicrosoftIdentity" asp-controller="Account" asp-action="SignOut">Sign out</a></li>
+            </ul>
+        </div>
+    </div>
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li><a class="btn btn-block btn-xs btn-success text-white" asp-area="MicrosoftIdentity" asp-controller="Account" asp-action="SignIn">Sign in</a></li>
+    </ul>
+}

@@ -1,0 +1,132 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>Proact_WebApp</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\favicon.ico" />
+    <Content Remove="wwwroot\lib\popper\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Identity.Web" Version="1.9.1" />
+    <PackageReference Include="Microsoft.Identity.Web.UI" Version="1.9.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="ExcelDataReader" Version="3.6.0" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
+    <PackageReference Include="ExcelDataReader.DataSet" Version="3.6.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Views\Users\" />
+    <Folder Include="Services\" />
+    <Folder Include="Models\Project\" />
+    <Folder Include="Views\Projects\" />
+    <Folder Include="Models\MedicalTeam\" />
+    <Folder Include="Views\MedicalTeams\" />
+    <Folder Include="Models\User\" />
+    <Folder Include="Views\MedicalTeamInfo\" />
+    <Folder Include="Views\MedicalTeamPatients\" />
+    <Folder Include="Models\Patient\" />
+    <Folder Include="Views\MedicalTeamMedics\" />
+    <Folder Include="Models\Survey\" />
+    <Folder Include="Views\Surveys\" />
+    <Folder Include="Models\Medics\" />
+    <Folder Include="Views\Medics\" />
+    <Folder Include="Views\Patients\" />
+    <Folder Include="Models\Nurse\" />
+    <Folder Include="Views\MedicalTeamNurses\" />
+    <Folder Include="Views\Nurses\" />
+    <Folder Include="Models\Survey\Request\" />
+    <Folder Include="Views\SurveyQuestionsSets\" />
+    <Folder Include="Models\Survey\Properties\" />
+    <Folder Include="Models\Survey\Converters\" />
+    <Folder Include="Models\Survey\Answers\" />
+    <Folder Include="ViewModels\" />
+    <Folder Include="ViewModels\SurveysSets\" />
+    <Folder Include="Models\Survey\Request\Questions\" />
+    <Folder Include="Models\Survey\Request\QuestionsSets\" />
+    <Folder Include="wwwroot\lib\popper\" />
+    <Folder Include="Models\Analysis\" />
+    <Folder Include="Views\Lexicons\" />
+    <Folder Include="Models\Institute\" />
+    <Folder Include="Models\Institute\Requests\" />
+    <Folder Include="Models\Documents\" />
+    <Folder Include="Views\Institute\" />
+    <Folder Include="Views\TermsAndConditions\" />
+    <Folder Include="Views\PrivacyPolicy\" />
+    <Folder Include="Utils\" />
+    <Folder Include="Utils\Validation\" />
+    <Folder Include="Resources\" />
+    <Folder Include="Models\Protocols\" />
+    <Folder Include="Models\Protocols\Requests\" />
+    <Folder Include="Views\Protocols\" />
+    <Folder Include="Models\HtmlContent\" />
+    <Folder Include="Views\Contact\" />
+    <Folder Include="ViewModels\Protocols\" />
+    <Folder Include="Models\Researcher\" />
+    <Folder Include="Views\MedicalTeamResearchers\" />
+    <Folder Include="Views\EmailEditor\" />
+    <Folder Include="Models\Configuration\" />
+    <Folder Include="Views\InstituteDashboard\" />
+    <Folder Include="Models\ProactMobileSettings\" />
+    <Folder Include="Views\ProactMobileSettings\" />
+    <Folder Include="Views\MedicalTeamAdminDashboard\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Models\Medics\" />
+    <None Remove="Views\Medics\" />
+    <None Remove="Views\Patients\" />
+    <None Remove="Models\Nurse\" />
+    <None Remove="Views\MedicalTeamNurses\" />
+    <None Remove="Views\Nurses\" />
+    <None Remove="Models\Survey\Request\" />
+    <None Remove="Views\SurveyQuestionsSets\" />
+    <None Remove="Models\Survey\Properties\" />
+    <None Remove="Models\Survey\Converters\" />
+    <None Remove="Models\Survey\Answers\" />
+    <None Remove="ViewModel\" />
+    <None Remove="ViewModels\SurveysSets\" />
+    <None Remove="Models\Survey\Request\Questions\" />
+    <None Remove="Models\Survey\Request\QuestionsSets\" />
+    <None Remove="Models\Analysis\" />
+    <None Remove="Views\Lexicons\" />
+    <None Remove="ExcelDataReader" />
+    <None Remove="System.Text.Encoding.CodePages" />
+    <None Remove="ExcelDataReader.DataSet" />
+    <None Remove="Models\Istitute\" />
+    <None Remove="Models\Institute\Requests\" />
+    <None Remove="Models\Documents\" />
+    <None Remove="Views\Institute\" />
+    <None Remove="Views\InstituteProperties\" />
+    <None Remove="Views\PrivacyPolicy\" />
+    <None Remove="Utils\" />
+    <None Remove="Utils\Validation\" />
+    <None Remove="Resources\" />
+    <None Remove="Models\Protocols\" />
+    <None Remove="Models\Protocols\Requests\" />
+    <None Remove="Views\Protocols\" />
+    <None Remove="Models\Contact\" />
+    <None Remove="Views\Contact\" />
+    <None Remove="ViewModels\Protocols\" />
+    <None Remove="Models\Researcher\" />
+    <None Remove="Views\MedicalTeamResearchers\" />
+    <None Remove="Views\EmailEditor\" />
+    <None Remove="Models\Configuration\" />
+    <None Remove="Views\Configuration\" />
+    <None Remove="Models\ProactMobileSettings\" />
+    <None Remove="Views\ProactMobileSettings\" />
+    <None Remove="Views\MedicalTeamAdminDashboard\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\GlobalResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>GlobalResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Resources\GlobalResources.Designer.cs">
+      <DependentUpon>GlobalResources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+</Project>

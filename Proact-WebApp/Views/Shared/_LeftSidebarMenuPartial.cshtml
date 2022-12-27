@@ -1,0 +1,62 @@
+﻿@using Microsoft.Identity.Web
+@using Microsoft.AspNetCore.Http
+
+@inject ISessionService sessionService;
+
+@{
+    bool isInstituteAdmin = false;
+    bool isSystemAdmin = false;
+    bool IsMedicalTeamAdmin = false;
+    bool IsMedicalProfessional = false;
+
+    if (User.Identity.IsAuthenticated)
+    {
+        isInstituteAdmin = sessionService.IsInstituteAdmin( Context.Session );
+        isSystemAdmin = sessionService.IsSystemAdmin(Context.Session);
+        IsMedicalTeamAdmin = sessionService.IsMedicalTeamAdmin(Context.Session);
+        IsMedicalProfessional = sessionService.IsMedicalProfessional( Context.Session );
+    }
+}
+
+@if (User.Identity.IsAuthenticated)
+{
+    <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+
+            <li class="nav-item">
+                <a asp-controller="Home" asp-action="Index" class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Home" ? "active" : "")">
+                    <i class="nav-icon fas fa-home"></i>
+                    <p>
+                        Home Page
+                    </p>
+                </a>
+            </li>
+
+            @if (isSystemAdmin)
+            {
+                <partial name="_LeftSidebarInstitutesMenuPartial" />
+            }
+            @if (isInstituteAdmin)
+            {
+                <partial name="_LeftSidebarInstitutePropertiesMenuPartial" />
+                <partial name="_LeftSidebarOrganizationMenuPartial" />
+                <partial name="_LeftSidebarAnalystMenuPartial" />
+            }
+            else if (IsMedicalTeamAdmin)
+            {
+                <partial name="_LeftSidebarProjectsAsMedicalTeamAdminMenuPartial" />
+                <partial name="_LeftSidebarMedicalTeamMenuPartial" />
+                <partial name="_LeftSidebarAnalystMenuAsMTAPartial" />
+                <partial name="_LeftSidebarSurveysMenuPartial" />
+            }
+            else if (IsMedicalProfessional)
+            {
+                <partial name="_LeftSidebarSurveysMenuPartial" />
+            }
+
+            @if ( IsMedicalTeamAdmin ) {
+                <partial name="_LeftSidebarEmailEditorMenuPartial" />
+            }
+        </ul>
+    </nav>
+}

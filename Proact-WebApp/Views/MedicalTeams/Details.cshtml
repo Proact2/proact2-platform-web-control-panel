@@ -1,0 +1,103 @@
+﻿@model MedicalTeamDetailsModel
+
+@{
+    ViewData["Title"] = "Medical Team Details";
+}
+
+<div class="row">
+    <!-- Details -->
+    <div class="col-6">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    @*<i class="fas fa-text-width"></i>*@
+                    @Model.MedicalTeam.Name
+                </h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.MedicalTeam.Name)</dt>
+                    <dd class="col-sm-8">@Model.MedicalTeam.Name</dd>
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.MedicalTeam.AddressLine1)</dt>
+                    <dd class="col-sm-8">@Model.MedicalTeam.AddressLine1</dd>
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.MedicalTeam.AddressLine2)</dt>
+                    <dd class="col-sm-8">@Model.MedicalTeam.AddressLine2</dd>
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.MedicalTeam.City)</dt>
+                    <dd class="col-sm-8">@Model.MedicalTeam.City</dd>
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.MedicalTeam.StateOrProvince)</dt>
+                    <dd class="col-sm-8">@Model.MedicalTeam.StateOrProvince</dd>
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.MedicalTeam.RegionCode)</dt>
+                    <dd class="col-sm-8">@Model.MedicalTeam.RegionCode</dd>
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.MedicalTeam.PostalCode)</dt>
+                    <dd class="col-sm-8">@Model.MedicalTeam.PostalCode</dd>
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.MedicalTeam.Country)</dt>
+                    <dd class="col-sm-8">@Model.MedicalTeam.Country</dd>
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.MedicalTeam.Phone)</dt>
+                    <dd class="col-sm-8">@Model.MedicalTeam.Phone</dd>
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.MedicalTeam.TimeZone)</dt>
+                    <dd class="col-sm-8">@Model.MedicalTeam.TimeZone</dd>
+                </dl>
+            </div>
+
+            <div class="card-footer">
+                <a asp-action="Index" asp-route-projectId="@ViewBag.projectId" class="btn btn-default">Back</a>
+            </div>
+
+        </div>
+    </div>
+    <!-- Admins -->
+    <div class="col-6">
+
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Admins</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body p-0">
+
+                <table id="AdminTable" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Admins.FirstOrDefault().Name)
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Admins)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+
+                            </tr>
+                        }
+                    </tbody>
+
+                </table>
+            </div>
+            <!-- /.card-body -->
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+
+    <!-- DataTables  & Plugins -->
+    <script src="~/lib/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/lib/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/lib/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/lib/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="~/lib/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/lib/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/lib/jszip/jszip.min.js"></script>
+    <script src="~/lib/pdfmake/pdfmake.min.js"></script>
+    <script src="~/lib/pdfmake/vfs_fonts.js"></script>
+    <script src="~/lib/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/lib/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="~/lib/datatables-buttons/js/buttons.colVis.min.js"></script>
+
+}

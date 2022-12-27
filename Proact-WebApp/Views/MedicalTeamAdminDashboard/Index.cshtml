@@ -1,0 +1,131 @@
+﻿@model MedicalTeamAdminDashboardModel
+@{
+    ViewData["Title"] = "Medical Team Admin Dashboard";
+}
+
+<div class="row mb-1">
+    <div class="col-8">
+        <form asp-action="Index" method="get" id="projectSelectForm">
+            <div class="row form-group">
+
+                <label for="projectIdSelect" class="col-sm-3 col-form-label">Select Study</label>
+
+                <div class="col-sm-6">
+                    <select name="id"
+                            id="projectIdSelect"
+                            class="form-control select2bs4"
+                            style="width: 100%;">
+                        @foreach (ProjectModel item in ViewBag.projects)
+                        {
+                            @if (ViewBag.selectedProject != null && ViewBag.selectedProject.ProjectId == item.ProjectId)
+                            {
+                                <option selected value="@item.ProjectId"> @Html.DisplayFor(modelItem => item.Name)</option>
+                            }
+                            else
+                            {
+                                <option value="@item.ProjectId"> @Html.DisplayFor(modelItem => item.Name)</option>
+                            }
+                        }
+                    </select>
+                </div>
+
+
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<div>
+    <div class="progress progress-xs">
+        @if (Model.CompletedServicePercentage == 100)
+        {
+            <div class="progress-bar bg-success" style="width: @Model.CompletedServicePercentage%"></div>
+        }
+        else if (Model.CompletedServicePercentage >= 50)
+        {
+            <div class="progress-bar bg-warning" style="width: @Model.CompletedServicePercentage%"></div>
+        }
+        else
+        {
+            <div class="progress-bar bg-danger" style="width: @Model.CompletedServicePercentage%"></div>
+        }
+
+    </div>
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Configurations tasks</h3>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body p-0">
+            <table class="table table-sm">
+                <thead>
+                    <tr>
+                        <th style="width: 10px">#</th>
+                        <th>Task</th>
+                        <th style="width: 300px">Progress</th>
+                        <th style="width: 150px">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var item in Model.ServicesConfigurationStatus)
+                    {
+                        <tr>
+                            <td>@item.Index.</td>
+                            <td>@item.Title</td>
+                            <td>
+                                @if (item.Completed)
+                                {
+
+                                    <div class="progress progress-xs">
+                                        <div class="progress-bar bg-success" style="width: 100%"></div>
+                                    </div>
+                                }
+                                else
+                                {
+
+                                    <div class="progress progress-xs">
+                                        <div class="progress-bar bg-danger" style="width: 5%"></div>
+                                    </div>
+                                }
+
+                            </td>
+                            <td>
+                                @if (!item.Completed)
+                                {
+                                    <a class="btn btn-sm btn-block  btn-success"
+                                       asp-action="@item.Action"
+                                       asp-controller="@item.Controller"
+                                       asp-route-id="@item.RouteId">Config</a>
+                                }
+
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <!-- /.card-body -->
+    </div>
+</div>
+
+@section Scripts {
+
+    <!-- Select2 -->
+    <script src="~/lib/select2/js/select2.full.min.js"></script>
+
+    <script>$(function () {
+
+            $('.select2').select2();
+
+            $('.select2bs4').select2({
+                theme: 'bootstrap4'
+            });
+
+            $(".select2bs4").change(function () {
+                $('#projectSelectForm').submit();
+            });
+
+        });</script>
+}

@@ -1,0 +1,286 @@
+﻿@model MedicalTeamIndexModel
+
+@{
+    ViewData["Title"] = "Medical Teams";
+    var openOnly = ViewBag.openOnly;
+}
+
+@if ( Model.Projects != null && Model.Projects.ToList().Count > 0 ) {
+
+    <div class="row mb-1">
+        <div class="col-8">
+            <form asp-action="Index" method="get" id="projectSelectForm">
+                <div class="row form-group">
+
+                    <label for="projectIdSelect" class="col-sm-3 col-form-label">Filter by Studies</label>
+
+                    <div class="col-sm-6">
+                        <select name="projectId"
+                                id="projectIdSelect"
+                                class="form-control select2bs4"
+                                style="width: 100%;">
+                            @foreach ( var item in Model.Projects ) {
+                                @if ( ViewBag.projectId != null && ViewBag.projectId == item.ProjectId.ToString() ) {
+                                    <option selected value="@item.ProjectId"> @Html.DisplayFor( modelItem => item.Name )</option>
+                                }
+                                else {
+                                    <option value="@item.ProjectId"> @Html.DisplayFor( modelItem => item.Name )</option>
+                                }
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-group col-sm-3">
+                        <div class="form-check">
+                            <input class="form-check-input"
+                                   type="checkbox"
+                                   id="showAll"
+                                   name="ShowAll"
+                                   checked="@(openOnly == false)" />
+                            <label for="showAll" class="form-check-label">Show closed</label>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-2"></div>
+        <div class="col-2">
+            <a class="btn btn-block btn-success" asp-action="Create" asp-route-projectId="@ViewBag.projectId"><i class="fas fa-plus"></i>  Create New</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Medical Teams</h3>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+
+
+                    <table id="MedicalTeamsTable" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th style="width:100px">
+                                    @Html.DisplayNameFor( model => model.MedicalTeams.FirstOrDefault().State )
+                                </th>
+                                <th style="width:250px">
+                                    @Html.DisplayNameFor( model => model.MedicalTeams.FirstOrDefault().MedicalTeamId )
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor( model => model.MedicalTeams.FirstOrDefault().Name )
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor( model => model.MedicalTeams.FirstOrDefault().AddressLine1 )
+                                </th>
+                                <th style="width:150px">
+                                    Actions
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ( var item in Model.MedicalTeams ) {
+                                <tr>
+                                    <td>
+                                        @if ( item.State == MedicalTeamState.Open ) {
+                                            <span class="badge bg-success">  @Html.DisplayFor( modelItem => item.State )</span>
+                                        }
+                                        else if ( item.State == MedicalTeamState.ClosedByProject || item.State == MedicalTeamState.ClosedByMedicalTeam ) {
+                                            <span class="badge bg-danger">  @Html.DisplayFor( modelItem => item.State )</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <small>@Html.DisplayFor( modelItem => item.MedicalTeamId )</small>
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor( modelItem => item.Name )
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor( modelItem => item.AddressLine1 )
+                                    </td>
+
+                                    <td>
+
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-default">Action</button>
+                                            <button type="button" class="btn btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown">
+                                                <span class="sr-only">Toggle Dropdown</span>
+                                            </button>
+                                            <div class="dropdown-menu" role="menu">
+
+                                                <a class="dropdown-item"
+                                                   asp-controller="MedicalTeams"
+                                                   asp-action="Details"
+                                                   asp-route-projectId="@ViewBag.projectId"
+                                                   asp-route-medicalTeamId="@item.MedicalTeamId">
+                                                    Details
+                                                </a>
+                                                <a class="dropdown-item"
+                                                   asp-controller="MedicalTeams"
+                                                   asp-action="Update"
+                                                   asp-route-projectId="@ViewBag.projectId"
+                                                   asp-route-medicalTeamId="@item.MedicalTeamId">
+                                                    Edit
+                                                </a>
+                                                <div class="dropdown-divider"></div>
+                                                @if ( item.State == MedicalTeamState.Open ) {
+
+                                                    <a data-toggle="modal"
+                                                       data-target="#modal-default"
+                                                       class="deleteItem dropdown-item tooltip_button"
+                                                       data-placement="top" title="Close"
+                                                       id="@item.MedicalTeamId"> Close</a>
+                                                }
+                                                else {
+                                                    <a data-toggle="modal"
+                                                       data-target="#modal-open"
+                                                       class="openItem dropdown-item tooltip_button"
+                                                       data-placement="top" title="Open"
+                                                       id="@item.MedicalTeamId"> Open</a>
+
+                                                }
+
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+
+                    </table>
+                </div>
+                <!-- /.card-body -->
+            </div>
+        </div>
+    </div>
+
+}
+else {
+    <div class="row">
+        <div class="col-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Medical Teams</h3>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+
+                    <div class="alert alert-info">
+                        <h5>
+                            <i class="icon fas fa-info"></i> There are no Studies!
+                        </h5>
+                        You have to create a Studio first.
+                    </div>
+
+                    <a asp-controller="Projects" asp-action="Create" type="button" class="btn btn-primary float-right"> Create new Study</a>
+
+                </div>
+                <!-- /.card-body -->
+            </div>
+        </div>
+    </div>
+}
+
+<div class="modal fade" id="modal-default">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Confirm</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Do you want to close this Medical Team?</p>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                @using (Html.BeginForm("Close", "MedicalTeams", FormMethod.Post))
+                {
+                    <input type="hidden" name="medicalTeamId" id="medicalTeamIdToClose" />
+                    <input type="hidden" name="projectId" id="projectId" value="@ViewBag.projectId" />
+                    <button id="btnContinueDelete" type="submit" class="btn btn-danger">Close Medica Team</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-open">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Confirm</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Do you want to open this Medical Team?</p>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                @using (Html.BeginForm("Open", "MedicalTeams", FormMethod.Post))
+                {
+                    <input type="hidden" name="medicalTeamId" id="medicalTeamIdToOpen" />
+                    <input type="hidden" name="projectId" id="projectId" value="@ViewBag.projectId" />
+                    <button id="btnContinueDelete" type="submit" class="btn btn-success">Open Medica Team</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    <!-- DataTables  & Plugins -->
+    <script src="~/lib/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/lib/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/lib/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/lib/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="~/lib/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/lib/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/lib/jszip/jszip.min.js"></script>
+    <script src="~/lib/pdfmake/pdfmake.min.js"></script>
+    <script src="~/lib/pdfmake/vfs_fonts.js"></script>
+    <script src="~/lib/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/lib/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="~/lib/datatables-buttons/js/buttons.colVis.min.js"></script>
+    <!-- Select2 -->
+    <script src="~/lib/select2/js/select2.full.min.js"></script>
+
+    <script>$(function () {
+
+            $('.select2').select2();
+
+            $('.select2bs4').select2({
+                theme: 'bootstrap4'
+            });
+
+            $(".select2bs4").change(function () {
+                $('#projectSelectForm').submit();
+            });
+
+            $('#showAll').change(function () {
+                $('#projectSelectForm').submit();
+            });
+
+            $("#MedicalTeamsTable").DataTable({
+                "responsive": true, "lengthChange": false, "autoWidth": false,
+                "buttons": ["excel", "pdf", "print"]
+            }).buttons().container().appendTo('#UsersTable_wrapper .col-md-6:eq(0)');
+
+            $('.deleteItem').click(function (e) {
+                var medicalTeamId = $(this).attr('id');
+                $('#medicalTeamIdToClose').val(medicalTeamId);
+            });
+
+            $('.openItem').click(function (e) {
+                var medicalTeamId = $(this).attr('id');
+                $('#medicalTeamIdToOpen').val(medicalTeamId);
+            });
+        });</script>
+
+
+}

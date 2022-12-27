@@ -1,0 +1,97 @@
+﻿@model Proact_WebApp.Models.SurveyQuestionSetCreateRequest
+@{
+    ViewData["Title"] = "Create a Survey set";
+}
+
+<div class="row">
+
+    <div class="col-md-8">
+
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Survey set info</h3>
+            </div>
+
+            <form asp-action="Create" method="post" id="SurveySetCreateForm" class="form-horizontal">
+                <div class="card-body">
+
+                    <input type="hidden" asp-for="ProjectId" />
+
+                    <div class="form-group row">
+                        <label asp-for="Title" class="col-sm-2 col-form-label"></label>
+                        <div class="col-sm-10">
+                            <input asp-for="Title" class="form-control">
+                            <span asp-validation-for="Title" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label asp-for="Description" class="col-sm-2 col-form-label"></label>
+                        <div class="col-sm-10">
+                            <input asp-for="Description" class="form-control">
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label asp-for="Version" class="col-sm-2 col-form-label"></label>
+                        <div class="col-sm-10">
+                            <input asp-for="Version" class="form-control">
+                            <span asp-validation-for="Version" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-success float-right">Create</button>
+                    <a asp-action="Index" class="btn btn-default float-left">Back</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    <!-- jquery-validation -->
+    <script src="~/lib/jquery-validation/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation/additional-methods.min.js"></script>
+
+    <script>$(function () {
+            $('#SurveySetCreateForm').validate({
+                rules: {
+                    Title: {
+                        required: true
+                    },
+                    Description: {
+                        required: true
+                    },
+                    Version: {
+                        required: true
+                    }
+                },
+                messages: {
+                    Title: {
+                        required: "Required field"
+                    },
+                    Description: {
+                        required: "Required field"
+                    }
+                },
+                errorElement: 'span',
+                errorPlacement: function (error, element) {
+                    error.addClass('invalid-feedback');
+                    element.closest('.form-group').append(error);
+                },
+                highlight: function (element, errorClass, validClass) {
+                    $(element).addClass('is-invalid');
+                },
+                unhighlight: function (element, errorClass, validClass) {
+                    $(element).removeClass('is-invalid');
+                }
+            });
+
+
+
+        });</script>
+}

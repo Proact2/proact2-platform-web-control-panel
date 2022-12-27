@@ -1,0 +1,103 @@
+﻿@model IEnumerable<Proact_WebApp.Models.SurveyAssignationModel>
+
+@{
+    ViewData["Title"] = "Patients";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">All patients</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <table id="UsersTable" class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th style="width:30px">
+                                State
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.User.Name)
+                            </th>
+                            <th style="width:200px">
+                                Period
+                            </th>
+
+                            <th style="width:120px">
+                                Actions
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @if ( item.Completed ) {
+                                        <span class="badge bg-success">Completed on @Html.DisplayFor( modelItem => item.CompletedDateTime )</span>
+                                    }
+                                    else if ( item.Expired ) {
+                                        <span class="badge bg-danger">Expired on  @Html.DisplayFor( modelItem => item.ExpireTime )</span>
+                                    }
+                                    else {
+                                        <span class="badge bg-warning">Not completed, expires on  @Html.DisplayFor( modelItem => item.ExpireTime )</span>
+                                    }
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.User.Name)
+                                </td>
+
+                                <td>
+                                    <span class="badge bg-info">
+                                        <i class="far fa-clock"></i>  @Html.DisplayFor(modelItem => item.StartTime)
+                                        <i class="fas fa-long-arrow-alt-right"></i>  @Html.DisplayFor(modelItem => item.ExpireTime)
+                                    </span>
+                                    <span class="badge bg-primary">@Html.DisplayFor(modelItem => item.Scheduler.Reccurence)</span>
+                                </td>
+
+                                <td>
+                                    @if ( item.Completed ) {
+                                        <a class="btn btn-sm btn-block btn-info" asp-action="Compiled" asp-route-id="@item.Id">Show answers</a>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+
+                </table>
+            </div>
+            <!-- /.card-body -->
+            <div class="card-footer">
+                <a asp-action="Index" class="btn btn-default float-left">Back</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+
+    <!-- DataTables  & Plugins -->
+    <script src="~/lib/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/lib/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/lib/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/lib/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="~/lib/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/lib/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/lib/jszip/jszip.min.js"></script>
+    <script src="~/lib/pdfmake/pdfmake.min.js"></script>
+    <script src="~/lib/pdfmake/vfs_fonts.js"></script>
+    <script src="~/lib/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/lib/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="~/lib/datatables-buttons/js/buttons.colVis.min.js"></script>
+
+    <script>$(function () {
+            $("#UsersTable").DataTable({
+                "responsive": true, "lengthChange": false, "autoWidth": false,
+                "buttons": ["excel", "pdf", "print", "colvis"]
+            }).buttons().container().appendTo('#UsersTable_wrapper .col-md-6:eq(0)');
+        });</script>
+}

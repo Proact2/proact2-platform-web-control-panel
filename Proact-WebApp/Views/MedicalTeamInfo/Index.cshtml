@@ -1,0 +1,146 @@
+﻿@model MedicalTeamDetailsModel
+@{
+    ViewData["Title"] = "Medical Team Info";
+}
+
+<!-- Medical team Select-->
+
+<div class="row mb-3">
+    <div class="col-6">
+    </div>
+
+    <div class="col-6">
+        <form class="form-horizontal" asp-action="Index" method="get" id="medicalTeamSelectForm">
+            <div class="form-group row">
+                <label for="medicalTeamId" class="col-sm-4 col-form-label text-right">Filter by Medical Team</label>
+                <div class="col-sm-8">
+                    <select name="medicalTeamId"
+                            id="medicalTeamId"
+                            class="form-control select2bs4"
+                            onchange="MedicalTeamSelectChanged();">
+                        @foreach (MedicalTeamModel item in ViewBag.medicalTeams)
+                        {
+                            @if (ViewBag.medicalTeamId != null && ViewBag.medicalTeamId == item.MedicalTeamId.ToString())
+                            {
+                                <option selected value="@item.MedicalTeamId"> @Html.DisplayFor(modelItem => item.Name)</option>
+                            }
+                            else
+                            {
+                                <option value="@item.MedicalTeamId"> @Html.DisplayFor(modelItem => item.Name)</option>
+                            }
+                        }
+                    </select>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+<div class="row">
+    <!-- Details -->
+    <div class="col-6">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    @*<i class="fas fa-text-width"></i>*@
+                    Medical Team details
+                </h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.MedicalTeam.Name)</dt>
+                    <dd class="col-sm-8">@Model.MedicalTeam.Name</dd>
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.MedicalTeam.AddressLine1)</dt>
+                    <dd class="col-sm-8">@Model.MedicalTeam.AddressLine1</dd>
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.MedicalTeam.AddressLine2)</dt>
+                    <dd class="col-sm-8">@Model.MedicalTeam.AddressLine2</dd>
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.MedicalTeam.City)</dt>
+                    <dd class="col-sm-8">@Model.MedicalTeam.City</dd>
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.MedicalTeam.StateOrProvince)</dt>
+                    <dd class="col-sm-8">@Model.MedicalTeam.StateOrProvince</dd>
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.MedicalTeam.RegionCode)</dt>
+                    <dd class="col-sm-8">@Model.MedicalTeam.RegionCode</dd>
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.MedicalTeam.PostalCode)</dt>
+                    <dd class="col-sm-8">@Model.MedicalTeam.PostalCode</dd>
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.MedicalTeam.Country)</dt>
+                    <dd class="col-sm-8">@Model.MedicalTeam.Country</dd>
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.MedicalTeam.Phone)</dt>
+                    <dd class="col-sm-8">@Model.MedicalTeam.Phone</dd>
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.MedicalTeam.TimeZone)</dt>
+                    <dd class="col-sm-8">@Model.MedicalTeam.TimeZone</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+    <!-- Admins -->
+    <div class="col-6">
+
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Administrators</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body p-0">
+
+                <table id="AdminTable" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Admins.FirstOrDefault().Name)
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Admins)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+
+                            </tr>
+                        }
+                    </tbody>
+
+                </table>
+            </div>
+            <!-- /.card-body -->
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+
+    <!-- DataTables  & Plugins -->
+    <script src="~/lib/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/lib/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/lib/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/lib/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="~/lib/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/lib/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/lib/jszip/jszip.min.js"></script>
+    <script src="~/lib/pdfmake/pdfmake.min.js"></script>
+    <script src="~/lib/pdfmake/vfs_fonts.js"></script>
+    <script src="~/lib/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/lib/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="~/lib/datatables-buttons/js/buttons.colVis.min.js"></script>
+
+    <!-- Select2 -->
+    <script src="~/lib/select2/js/select2.full.min.js"></script>
+
+    <script>$(function () {
+
+            $('.select2').select2();
+
+            $('.select2bs4').select2({
+                theme: 'bootstrap4'
+            });
+
+            $(".select2bs4").change(function () {
+                $('#medicalTeamSelectForm').submit();
+            });
+
+        });</script>
+}

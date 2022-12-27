@@ -1,0 +1,31 @@
+﻿@model Proact_WebApp.Models.DocumentModel
+
+@{
+    ViewData["Title"] = "Terms and Conditions";
+}
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Terms and Conditions</h3>
+            </div>
+            <div class="card-body">
+                <dl>
+                    <dt><label asp-for="Title"></label></dt>
+                    <dd>@Model.Title</dd>
+                    <dt><label asp-for="Description"></label></dt>
+                    <dd>@Model.Description</dd>
+                    <dt><label asp-for="Url"></label></dt>
+                    <dd class="row">
+                        <div class="col-6"><a href="@Model.Url" target="_blank" class="btn btn-danger btn-block"><i class="fa fa-eye"></i> Show Terms and Conditions</a></div>
+                    </dd>
+                </dl>
+            </div>
+            <div class="card-footer">
+                <a asp-action="Update" class="btn btn-primary float-right">Update</a>
+            </div>
+        </div>
+    </div>
+</div>
+

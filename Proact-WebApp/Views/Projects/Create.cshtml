@@ -1,0 +1,216 @@
+﻿@model Proact_WebApp.Models.ProjectCreateRequest
+@{
+    ViewData["Title"] = "Create new Study";
+}
+
+<form asp-action="Create" class="form-horizontal">
+    <div class="row">
+        <div class="col-md-10">
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">New Study</h3>
+                </div>
+
+                <div class="card-body">
+
+                    <h4>Data</h4>
+
+                    <div class="form-group row">
+                        <label asp-for="Name" class="col-sm-4 col-form-label"></label>
+                        <div class="col-sm-6">
+                            <input asp-for="Name" class="form-control">
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label asp-for="Description" class="col-sm-4 col-form-label"></label>
+                        <div class="col-sm-6">
+                            <input asp-for="Description" class="form-control">
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label asp-for="SponsorName" class="col-sm-4 col-form-label"></label>
+                        <div class="col-sm-6">
+                            <input asp-for="SponsorName" class="form-control">
+                            <span asp-validation-for="SponsorName" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <h4>Properties</h4>
+
+                    <div class="form-group row">
+                        <label asp-for="Properties.IsMessagingActive" class="col-sm-4 col-form-label"></label>
+                        <div class="col-sm-6">
+
+                            <input type="checkbox"
+                                   asp-for="Properties.IsMessagingActive"
+                                   id="messagingActiveCheckbox"
+                                   data-bootstrap-switch data-off-color="danger"
+                                   data-on-color="success"
+                                   data-on-text="Yes"
+                                   data-off-text="No">
+                        </div>
+                    </div>
+
+                    <div class="form-group row" id="MessageCanNotBeDeletedAfterMinutes">
+                        <label asp-for="Properties.MessageCanNotBeDeletedAfterMinutes" class="col-sm-4 col-form-label"></label>
+                        <div class="col-sm-6">
+
+                            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                <label class="btn btn-info">
+                                    <input type="radio" autocomplete="off" asp-for="Properties.MessageCanNotBeDeletedAfterMinutes" value="999999"> Always
+                                </label>
+                                <label class="btn btn-info">
+                                    <input type="radio" autocomplete="off" asp-for="Properties.MessageCanNotBeDeletedAfterMinutes" value="15"> within 15 minutes
+                                </label>
+                                <label class="btn btn-info">
+                                    <input type="radio" autocomplete="off" asp-for="Properties.MessageCanNotBeDeletedAfterMinutes" value="60"> within 1 hour
+                                </label>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group row" id="MessageCanBeRepliedAfterMinutes">
+                        <label asp-for="Properties.MessageCanBeRepliedAfterMinutes" class="col-sm-4 col-form-label"></label>
+                        <div class="col-sm-6">
+                            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                <label class="btn btn-info">
+                                    <input type="radio" autocomplete="off" asp-for="Properties.MessageCanBeRepliedAfterMinutes" value="0"> Always
+                                </label>
+                                <label class="btn btn-info">
+                                    <input type="radio" autocomplete="off" asp-for="Properties.MessageCanBeRepliedAfterMinutes" value="15"> after 15 minutes
+                                </label>
+                                <label class="btn btn-info">
+                                    <input type="radio" autocomplete="off" asp-for="Properties.MessageCanBeRepliedAfterMinutes" value="60"> after 1 hour
+                                </label>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label asp-for="Properties.IsSurveysSystemActive" class="col-sm-4 col-form-label"></label>
+                        <div class="col-sm-6">
+
+                            <input type="checkbox"
+                                   asp-for="Properties.IsSurveysSystemActive"
+                                   data-bootstrap-switch data-off-color="danger"
+                                   data-on-color="success"
+                                   data-on-text="Yes"
+                                   data-off-text="No">
+
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label asp-for="Properties.IsAnalystConsoleActive" class="col-sm-4 col-form-label"></label>
+                        <div class="col-sm-6">
+
+                            <input type="checkbox"
+                                   asp-for="Properties.IsAnalystConsoleActive"
+                                   id="AnalystConsoleCheckbox"
+                                   data-bootstrap-switch data-off-color="danger"
+                                   data-on-color="success"
+                                   data-on-text="Yes"
+                                   data-off-text="No">
+
+                        </div>
+                    </div>
+
+                    <div class="form-group row" id="MedicsCanSeeOtherAnalisys">
+                        <label asp-for="Properties.MedicsCanSeeOtherAnalisys" class="col-sm-4 col-form-label"></label>
+                        <div class="col-sm-6">
+
+                            <input type="checkbox"
+                                   asp-for="Properties.MedicsCanSeeOtherAnalisys"
+                                   data-bootstrap-switch data-off-color="danger"
+                                   data-on-color="success"
+                                   data-on-text="Yes"
+                                   data-off-text="No">
+
+                        </div>
+                    </div>
+
+                    <div class="form-group row" id="MessageCanBeAnalizedAfterMinutes">
+                        <label asp-for="Properties.MessageCanBeAnalizedAfterMinutes" class="col-sm-4 col-form-label"></label>
+                        <div class="col-sm-6">
+
+                            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                <label class="btn btn-info">
+                                    <input type="radio" autocomplete="off" asp-for="Properties.MessageCanBeAnalizedAfterMinutes" value="0"> Always
+                                </label>
+                                <label class="btn btn-info">
+                                    <input type="radio" autocomplete="off" asp-for="Properties.MessageCanBeAnalizedAfterMinutes" value="15"> after 15 minutes
+                                </label>
+                                <label class="btn btn-info">
+                                    <input type="radio" autocomplete="off" asp-for="Properties.MessageCanBeAnalizedAfterMinutes" value="60"> after 1 Hour
+                                </label>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer">
+                    <button asp-action="Index" class="btn btn-default">Back</button>
+                    <button type="submit" class="btn btn-success float-right">Create</button>
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+
+    <div class="row">
+
+    </div>
+
+</form>
+
+@section Scripts {
+    <!-- Bootstrap Switch -->
+    <script src="~/lib/bootstrap-switch/js/bootstrap-switch.min.js"></script>
+
+    <script>$(document).ready(function () {
+            $('#MedicsCanSeeOtherAnalisys').hide();
+            $('#MessageCanBeAnalizedAfterMinutes').hide();
+
+
+            $("input[data-bootstrap-switch]").each(function () {
+                $(this).bootstrapSwitch('state', $(this).prop('checked'));
+            });
+
+            $('#AnalystConsoleCheckbox').on('switchChange.bootstrapSwitch', function (event, state) {
+                if (this.checked) {
+                    $('#MedicsCanSeeOtherAnalisys').show();
+                    $('#MessageCanBeAnalizedAfterMinutes').show();
+                }
+                else {
+                    $('#MedicsCanSeeOtherAnalisys').hide();
+                    $('#MessageCanBeAnalizedAfterMinutes').hide();
+                }
+            });
+
+            $('#messagingActiveCheckbox').on('switchChange.bootstrapSwitch', function (event, state) {
+                if (this.checked) {
+                    $('#MessageCanNotBeDeletedAfterMinutes').show();
+                    $('#MessageCanBeRepliedAfterMinutes').show();
+                }
+                else {
+                    $('#MessageCanNotBeDeletedAfterMinutes').hide();
+                    $('#MessageCanBeRepliedAfterMinutes').hide();
+                }
+            });
+
+        });</script>
+
+
+
+}

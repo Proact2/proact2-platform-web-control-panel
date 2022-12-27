@@ -1,0 +1,23 @@
+﻿<li class="nav-header">SURVEYS</li>
+
+<li class="nav-item">
+    <a asp-controller="SurveyQuestionsSets"
+       asp-action="Index"
+       class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "SurveyQuestionsSets" ? "active" : "")">
+        <i class="nav-icon fas fa-inbox"></i>
+        <p>
+            Questions Set
+        </p>
+    </a>
+</li>
+
+<li class="nav-item">
+    <a asp-controller="Surveys"
+       asp-action="Index"
+       class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Surveys" ? "active" : "")">
+        <i class="nav-icon fas fa-file-invoice"></i>
+        <p>
+            Surveys
+        </p>
+    </a>
+</li>

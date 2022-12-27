@@ -1,0 +1,267 @@
+﻿@model IEnumerable<Proact_WebApp.Models.SurveyModel>
+
+@{
+    ViewData["Title"] = "Surveys";
+}
+
+<div class="row mb-1">
+    <div class="col-8">
+        <form asp-action="Index" method="get" id="projectSelectForm">
+            <div class="row form-group">
+
+                <label for="projectIdSelect" class="col-sm-3 col-form-label">Select Study</label>
+
+                <div class="col-sm-6">
+                    <select name="id"
+                            id="projectIdSelect"
+                            class="form-control select2bs4"
+                            style="width: 100%;">
+                        @foreach (ProjectModel item in ViewBag.projects)
+                        {
+                            @if (ViewBag.selectedProject != null && ViewBag.selectedProject.ProjectId == item.ProjectId)
+                            {
+                                <option selected value="@item.ProjectId"> @Html.DisplayFor(modelItem => item.Name)</option>
+                            }
+                            else
+                            {
+                                <option value="@item.ProjectId"> @Html.DisplayFor(modelItem => item.Name)</option>
+                            }
+                        }
+                    </select>
+                </div>
+
+
+            </div>
+        </form>
+    </div>
+    <div class="col-2"></div>
+    <div class="col-2">
+        <a class="btn btn-block btn-success"
+           asp-action="Create"
+           asp-route-projectId="@ViewBag.selectedProject.ProjectId"><i class="fas fa-plus"></i> New survey</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+
+            <!-- /.card-header -->
+            <div class="card-body">
+                <table id="SurveysTable" class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th style="width: 150px">
+                                @Html.DisplayNameFor(model => model.SurveyState)
+                            </th>
+                            <th style="width: 150px">
+                                @Html.DisplayNameFor(model => model.Created)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Title)
+                            </th>
+                            <th style="width: 100px">
+                                @Html.DisplayNameFor(model => model.Version)
+                            </th>
+                            <th>
+                                Period
+                            </th>
+                            <th style="width: 100px">
+                                Actions
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                        <tr>
+                            <td>
+                                @if (item.Expired)
+                                {
+                                    <span class="badge bg-danger">EXPIRED</span>
+                                }
+                                else
+                                {
+                                    <partial name="_surveyStateBadgePartial" model="item.SurveyState" />
+                                }
+
+                                <span class="badge bg-info">@Html.DisplayFor(modelItem => item.Questions.Count) questions</span>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Created)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Title)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Version)
+                            </td>
+
+                            <td>
+                                @if ( item.SurveyState == SurveyState.PUBLISHED ) {
+                                    <span class="badge bg-info">
+                                        <i class="far fa-clock"></i>  @Html.DisplayFor( modelItem => item.StartTime )
+                                        <i class="fas fa-long-arrow-alt-right"></i>  @Html.DisplayFor( modelItem => item.ExpireTime )
+                                    </span>
+                                    <span class="badge bg-primary">@Html.DisplayFor( modelItem => item.Reccurence )</span>
+                                }
+                                else {
+                                    <span class="badge bg-danger">
+                                       Undefined
+                                    </span>
+                                }
+
+                            </td>
+
+                            <td>
+
+
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default">Action</button>
+                                    <button type="button" class="btn btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown">
+                                        <span class="sr-only">Toggle Dropdown</span>
+                                    </button>
+                                    <div class="dropdown-menu" role="menu">
+
+                                        @if ( !item.Expired ) {
+                                            <a asp-action="AssignationsConfigurations"
+                                               asp-route-id="@item.Id"
+                                               class="dropdown-item"><i class="fas fa-user-plus"></i> Assign to patients</a>
+                                        }
+
+
+                                        <a asp-action="PatientsAssigned"
+                                           asp-route-id="@item.Id"
+                                           class="dropdown-item"><i class="fas fa-tasks"></i> Show Answers</a>
+
+                                        <a asp-action="Stats"
+                                           asp-route-id="@item.Id"
+                                           class="dropdown-item"><i class="fas fa-chart-pie"></i> Statistics</a>
+
+
+                                        @if (item.SurveyState == SurveyState.DRAW)
+                                        {
+                                            <a asp-action="Edit"
+                                               asp-route-id="@item.Id"
+                                               class="dropdown-item"><i class="fas fa-edit"></i> Edit</a>
+
+                                            <div class="dropdown-divider"></div>
+                                            <a data-toggle="modal"
+                                               name="Delete"
+                                               data-target="#modal-default"
+                                               class="deleteItem dropdown-item"
+                                               id="@item.Id"><i class="fas fa-trash"></i> Delete</a>
+                                        }
+                                    </div>
+                                </div>
+
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.card-body -->
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-default">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Confirm delete</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Do you want to delete the survey?</p>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                @using (Html.BeginForm("Delete", "Surveys", FormMethod.Post))
+                {
+                    <input type="hidden" name="id" id="idToDelete" />
+                    <button id="btnContinueDelete" type="submit" class="btn btn-danger">Delete</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-duplicate">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Confirm duplication</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Do you want to duplicate the survey?</p>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                @using (Html.BeginForm("Duplicate", "Surveys", FormMethod.Post))
+                {
+                    <input type="hidden" name="id" id="idToDuplicate" />
+                    <button id="btnContinueDuplicate" type="submit" class="btn btn-success">Duplicate</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    <!-- DataTables  & Plugins -->
+    <script src="~/lib/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/lib/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/lib/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/lib/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="~/lib/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/lib/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/lib/jszip/jszip.min.js"></script>
+    <script src="~/lib/pdfmake/pdfmake.min.js"></script>
+    <script src="~/lib/pdfmake/vfs_fonts.js"></script>
+    <script src="~/lib/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/lib/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="~/lib/datatables-buttons/js/buttons.colVis.min.js"></script>
+    <script src="~/lib/popper/popper.min.js"></script>
+    <!-- Select2 -->
+    <script src="~/lib/select2/js/select2.full.min.js"></script>
+
+
+    <script>$(function () {
+
+            $('.select2').select2();
+
+            $('.select2bs4').select2({
+                theme: 'bootstrap4'
+            });
+
+            $(".select2bs4").change(function () {
+                $('#projectSelectForm').submit();
+            });
+
+
+            $('.tooltip_button').tooltip();
+    $("#SurveysTable").DataTable({
+        "ordering": false,
+                "responsive": true, "lengthChange": false, "autoWidth": false,
+                "buttons": ["excel", "pdf", "print", "colvis"]
+            }).buttons().container().appendTo('#SurveysTable_wrapper .col-md-6:eq(0)');
+        });</script>
+
+    <script>$('.deleteItem').click(function (e) {
+            var id = $(this).attr('id');
+            $('#idToDelete').val(id);
+        });</script>
+
+    <script>$('.duplicateItem').click(function (e) {
+            var id = $(this).attr('id');
+            $('#idToDuplicate').val(id);
+        });</script>
+}

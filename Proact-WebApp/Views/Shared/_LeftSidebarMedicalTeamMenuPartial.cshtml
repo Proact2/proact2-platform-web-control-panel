@@ -1,0 +1,32 @@
+﻿<li class="nav-header">MEDICAL TEAM</li>
+
+<li class="nav-item">
+    <a asp-controller="MedicalTeamInfo"
+       asp-action="Index"
+       asp-route-medicalTeamId=""
+       class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "MedicalTeamInfo" ? "active" : "")">
+        <i class="fas fa-notes-medical nav-icon"></i>
+        <p>Info</p>
+    </a>
+</li>
+
+<li class="nav-item">
+    <a asp-controller="MedicalTeamMedics"
+       asp-action="Index"
+       asp-route-medicalTeamId=""
+       class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "MedicalTeamMedics" ? "active" : "")">
+        <i class="fas fa-user-md nav-icon"></i>
+        <p>Medics</p>
+    </a>
+</li>
+
+<li class="nav-item">
+    <a asp-controller="MedicalTeamNurses"
+       asp-action="Index"
+       asp-route-medicalTeamId=""
+       class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "MedicalTeamNurses" ? "active" : "")">
+        <i class="fas fa-user-nurse nav-icon"></i>
+        <p>Nurses</p>
+    </a>
+</li>
+

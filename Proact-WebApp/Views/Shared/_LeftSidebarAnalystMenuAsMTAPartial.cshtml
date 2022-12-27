@@ -1,0 +1,12 @@
+﻿<li class="nav-header">ANALYST CONSOLE</li>
+
+<li class="nav-item">
+    <a asp-controller="MedicalTeamResearchers"
+       asp-action="Index"
+       class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "MedicalTeamResearchers" ? "active" : "")">
+        <i class="nav-icon fas fa-chalkboard-teacher"></i>
+        <p>
+            Researchers
+        </p>
+    </a>
+</li>

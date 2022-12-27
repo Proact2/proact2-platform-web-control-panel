@@ -1,0 +1,67 @@
+﻿@model Proact_WebApp.Models.AssociateLexiconToProjectRequest
+@{
+    ViewData["Title"] = "Associate lexicon to the Study";
+}
+
+<div class="row">
+    <div class="col-md-8">
+
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Select a lexicon</h3>
+            </div>
+
+            <form asp-action="AssociateLexicon" id="AssociateLexiconForm" class="form-horizontal">
+                <div class="card-body">
+
+                    <div class="alert alert-warning">
+                        <h5><i class="icon fas fa-exclamation-triangle"></i> Attention, this association is irreversible.</h5>
+                        It is not possible to remove or modify the lexicon after association.
+                    </div>
+
+                    <input type="hidden" asp-for="ProjectId" />
+                    <div class="form-group row">
+                        <label asp-for="LexiconId" class="col-sm-2 col-form-label">Lexicon</label>
+                        <div class="col-sm-10">
+                            <select asp-for="LexiconId"
+                                    data-placeholder="Lexicon"
+                                    class="form-control select2bs4">
+                                @foreach (LexiconModel item in ViewBag.lexicons)
+                                {
+                                    <option value="@item.Id"> @Html.DisplayFor(modelItem => item.Name)</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-success float-right">Associate</button>
+                    <a asp-action="Index" class="btn btn-default float-left">Back</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+
+    <!-- jquery-validation -->
+    <script src="~/lib/jquery-validation/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation/additional-methods.min.js"></script>
+    <!-- Select2 -->
+    <script src="~/lib/select2/js/select2.full.min.js"></script>
+    <!-- InputMask -->
+    <script src="~/lib/moment/moment.min.js"></script>
+    <script src="~/lib/inputmask/jquery.inputmask.min.js"></script>
+
+    <script>$(function () {
+
+            $('.select2').select2();
+
+            $('.select2bs4').select2({
+                theme: 'bootstrap4'
+            });
+        });</script>
+}

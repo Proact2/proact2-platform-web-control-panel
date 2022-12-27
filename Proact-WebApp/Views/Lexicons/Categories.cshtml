@@ -1,0 +1,77 @@
+﻿@model Proact_WebApp.Models.LexiconModel
+
+@{
+    ViewData["Title"] = Model.Name + " - Categories";
+}
+
+
+@foreach (var category in Model.Categories)
+{
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"> @category.Name</h3>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <table id="ItemsTable" class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th style="width: 200px">
+                                    @Html.DisplayNameFor(model => model.Categories[0].Labels[0].GroupName)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Categories[0].Labels[0].Label)
+                                </th>
+                              
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in category.Labels)
+                            {
+                                <tr>
+                                    <td>
+                                        <h6><span class="badge" style="background-color: @item.BgGroupColor; color: @item.TextGroupColor">@item.GroupName</span></h6>
+                                    </td>
+                                    <td>
+                                        @item.Label
+                                    </td>
+
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.card-body -->
+            </div>
+        </div>
+    </div>
+
+}
+
+@section Scripts {
+
+    <!-- DataTables  & Plugins -->
+    <script src="~/lib/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/lib/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/lib/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/lib/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="~/lib/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/lib/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/lib/jszip/jszip.min.js"></script>
+    <script src="~/lib/pdfmake/pdfmake.min.js"></script>
+    <script src="~/lib/pdfmake/vfs_fonts.js"></script>
+    <script src="~/lib/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/lib/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="~/lib/datatables-buttons/js/buttons.colVis.min.js"></script>
+
+    <script>$(function () {
+            $(".table").DataTable({
+                "responsive": true, "lengthChange": false, "autoWidth": false,
+                "buttons": ["excel", "pdf", "print", "colvis"]
+            }).buttons().container().appendTo('#UsersTable_wrapper .col-md-6:eq(0)');
+        });</script>
+
+}

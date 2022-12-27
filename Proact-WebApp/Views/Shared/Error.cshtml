@@ -1,0 +1,38 @@
+﻿@model ErrorViewModel
+@{
+    ViewData["Title"] = "Error";
+}
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card card-default">
+
+            <!-- /.card-header -->
+            <div class="card-body">
+                <div class="alert alert-danger alert-dismissible">
+
+                    @if ( Model.StatusCode == System.Net.HttpStatusCode.Forbidden ) {
+                        <h5><i class="icon fas fa-ban"></i> Forbidden error</h5>
+                        <div>You do not have the permissions to access this resource.</div>
+                    }
+                    else {
+                        <h5><i class="icon fas fa-ban"></i> Error</h5>
+                        <div>An error occurred while processing your request.</div>
+                    }
+
+                    @if (Model.ShowRequestId)
+                    {
+                        <p>
+                            <strong>Request ID:</strong> <code>@Model.RequestId</code>
+                        </p>
+                    }
+                </div>
+
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+    </div>
+    <!-- /.col -->
+
+</div>

@@ -1,0 +1,182 @@
+﻿@model Proact_WebApp.Models.SurveyAssignationsRequest
+@{
+    ViewData["Title"] = "Assignation options";
+}
+
+<form asp-action="AssignationsConfigurations" method="post" id="SurveyAssignationsConfigurationForm" class="form-horizontal">
+    <div class="row">
+
+        <div class="col-md-8">
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Options</h3>
+                </div>
+
+                <div class="card-body">
+
+                    @if (ViewBag.expired)
+                    {
+                        <div class="alert alert-danger">
+                            The questionnaire has expired.
+                        </div>
+                    }
+                    else if (ViewBag.published )
+                    {
+                        <div class="alert alert-warning">
+                            The survey is already published, you cannot change the assignment options.
+                        </div>
+                    }
+
+                    <input type="hidden" asp-for="SurveyId" />
+
+                    <div class="form-group row">
+                        <label asp-for="StartTime" class="col-sm-2 col-form-label"></label>
+                        <div class="col-sm-10">
+
+                            @if ( ViewBag.published ) {
+                                <input type="hidden" asp-for="StartTime">
+                                @Html.DisplayFor( modelItem => Model.StartTime );
+                            }
+                            else {
+                                <input type="date" asp-for="StartTime" class="form-control startDate">
+                                <span asp-validation-for="StartTime" class="text-danger"></span>
+                            }
+
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label asp-for="ExpireTime" class="col-sm-2 col-form-label"></label>
+                        <div class="col-sm-10">
+
+                            @if ( ViewBag.published ) {
+                                <input type="hidden" asp-for="ExpireTime">
+
+                                @Html.DisplayFor( modelItem => Model.ExpireTime );
+                            }
+                            else {
+                                <input type="date" asp-for="ExpireTime" class="form-control">
+                                <span asp-validation-for="ExpireTime" class="text-danger"></span>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label asp-for="Reccurence" class="col-sm-2 col-form-label"></label>
+                        <div class="col-sm-10">
+
+                            @if ( ViewBag.published ) {
+                                <input type="hidden" asp-for="Reccurence">
+                                @Model.Reccurence
+                            }
+                            else {
+                                <select id="questionTypeSelect"
+                                        asp-for="Reccurence"
+                                        asp-items="Html.GetEnumSelectList<SurveyReccurence>()"
+                                        class="form-control"
+                                        style="width: 100%;">
+                                    <option selected="selected" value="">Please select</option>
+                                </select>
+                                <span asp-validation-for="Reccurence" class="text-danger"></span>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer">
+                    <a asp-action="Index" class="btn btn-default float-left">Back</a>
+                    @if (!ViewBag.expired)
+                    {
+                        <button type="submit" class="btn btn-success float-right">Next</button>
+                    }
+                </div>
+            </div>
+        </div>
+
+    </div>
+</form>
+
+
+@section Scripts {
+
+    <!-- jquery-validation -->
+    <script src="~/lib/jquery-validation/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation/additional-methods.min.js"></script>
+
+    <script>
+
+        $.validator.addMethod("minDate", function (value, element) {
+            var curDate = new Date();
+            var inputDate = new Date(value);
+
+            curDate.setHours(0, 0, 0, 0);
+            inputDate.setHours(0, 0, 0, 0);
+            if (inputDate < curDate)
+                return false;
+            return true;
+        }, "Invalid Date!");
+
+        $.validator.addMethod("maxDate", function (value, element) {
+            var startDate = new Date($(".startDate").val());
+            var inputDate = new Date(value);
+
+            startDate.setHours(0, 0, 0, 0);
+            inputDate.setHours(0, 0, 0, 0);
+
+            if (inputDate < startDate)
+                return false;
+            return true;
+        }, "Invalid Date!");
+
+
+        $(function () {
+
+            $("#SurveyAssignationsConfigurationForm").validate({
+                rules: {
+                    StartTime: {
+                        required: true,
+                        minDate: true
+                    },
+                    ExpireTime: {
+                        required: true,
+                        minDate: true,
+                        maxDate: true
+                    },
+                    Reccurence: {
+                        required: true
+                    },
+                },
+                messages: {
+                    StartTime: {
+                        required: "Required field",
+                        minDate:"Select today or a later date"
+                    },
+
+                    ExpireTime: {
+                        required: "Required field",
+                        minDate: "Select today or a later date",
+                        maxDate:"The Expire Date must be later than the Start date"
+                    },
+
+                    Reccurence: {
+                        required: "Required field"
+                    }
+                },
+                errorElement: 'span',
+                errorPlacement: function (error, element) {
+                    error.addClass('invalid-feedback');
+                    element.closest('.form-group').append(error);
+                },
+                highlight: function (element, errorClass, validClass) {
+                    $(element).addClass('is-invalid');
+                },
+                unhighlight: function (element, errorClass, validClass) {
+                    $(element).removeClass('is-invalid');
+                },
+                submitHandler: function (form) {
+                    form.submit();
+                }
+            });
+
+        });</script>
+}

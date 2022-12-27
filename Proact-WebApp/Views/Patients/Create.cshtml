@@ -1,0 +1,164 @@
+﻿@model Proact_WebApp.Models.PatientCreateRequest
+@{
+    ViewData["Title"] = "Create new patient";
+}
+
+<form asp-action="Create" id="UserCreateForm" class="form-horizontal">
+
+    <div class="row">
+        <div class="col-md-8">
+
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">User Data</h3>
+                </div>
+
+
+                <div class="card-body">
+
+                    <div class="form-group row required">
+                        <label asp-for="Email" class="col-sm-2 col-form-label"></label>
+                        <div class="col-sm-10">
+                            <input asp-for="Email" class="form-control">
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-8">
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Patient Data</h3>
+                </div>
+                <div class="card-body">
+
+                    <div class="form-group row">
+                        <label asp-for="FirstName" class="col-sm-2 col-form-label"></label>
+                        <div class="col-sm-10">
+                            <input asp-for="FirstName" class="form-control">
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label asp-for="LastName" class="col-sm-2 col-form-label"></label>
+                        <div class="col-sm-10">
+                            <input asp-for="LastName" class="form-control">
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label asp-for="Birthday" class="col-sm-2 col-form-label"></label>
+                        <div class="col-sm-10">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                </div>
+                                <input asp-for="Birthday"
+                                       type="date"
+                                       id="birthyear"
+                                       class="form-control"
+                                       data-inputmask-alias="datetime"
+                                       data-inputmask-inputformat="yyyy"
+                                       data-mask>
+                            </div>
+
+                            <span asp-validation-for="Birthday" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label asp-for="Gender" class="col-sm-2 col-form-label"></label>
+                        <div class="col-sm-10">
+                            <select asp-for="Gender"
+                                    class="form-control select2bs4">
+                                <option value="">Select</option>
+                                <option value="M">Male</option>
+                                <option value="F">Female</option>
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <input type="hidden" asp-for="RedirectToAssociationAction" />
+                <input type="hidden" asp-for="MedicalTeamIdToAssociate" />
+
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-success float-right">Create</button>
+                    <a asp-action="Index" class="btn btn-default float-left">Back</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+@section Scripts {
+
+    <!-- jquery-validation -->
+    <script src="~/lib/jquery-validation/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation/additional-methods.min.js"></script>
+    <!-- Select2 -->
+    <script src="~/lib/select2/js/select2.full.min.js"></script>
+    <!-- InputMask -->
+    <script src="~/lib/moment/moment.min.js"></script>
+    <script src="~/lib/inputmask/jquery.inputmask.min.js"></script>
+
+    <script>$(function () {
+
+            $('.select2').select2();
+
+            $('.select2bs4').select2({
+                theme: 'bootstrap4'
+            });
+
+            $('#birthyear').inputmask()
+            $('#treatmentStartDate').inputmask()
+            $('#treatmentEndDate').inputmask()
+
+
+            $('#UserCreateForm').validate({
+                rules: {
+                    Code: {
+                        required: true
+                    },
+                    Email: {
+                        required: true,
+                        email: true
+                    }
+
+                },
+                messages: {
+                    Code: {
+                        required: "Required field"
+                    },
+                    Email: {
+                        required: "Required field",
+                        email: "Invalid email address"
+                    }
+                },
+                errorElement: 'span',
+                errorPlacement: function (error, element) {
+                    error.addClass('invalid-feedback');
+                    element.closest('.form-group').append(error);
+                },
+                highlight: function (element, errorClass, validClass) {
+                    $(element).addClass('is-invalid');
+                },
+                unhighlight: function (element, errorClass, validClass) {
+                    $(element).removeClass('is-invalid');
+                }
+            });
+
+        });</script>
+}

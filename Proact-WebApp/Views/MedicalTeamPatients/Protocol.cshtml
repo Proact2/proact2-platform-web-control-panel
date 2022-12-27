@@ -1,0 +1,75 @@
+﻿@model Proact_WebApp.Models.ProtocolModel
+@{
+    ViewData["Title"] = "Protocol";
+
+}
+
+<div class="row">
+    <div class="col-6">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Protocol</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+
+                @if (Model.IsEmpty)
+                {
+                    <p class="lead text-danger">No protocol associated with this Patient!</p>
+                    <a asp-action="AssignProtocol"
+                       asp-route-userId="@ViewBag.userId"
+                       asp-route-medicalTeamId="@ViewBag.medicalTeamId" type="button" class="btn btn-outline-primary float-left">Assign protocol</a>
+                }
+                else
+                {
+                    <dl class="row">
+                        <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Name)</dt>
+                        <dd class="col-sm-8">@Model.Name</dd>
+                        <dt class="col-sm-4">@Html.DisplayNameFor(model => model.InternalCode)</dt>
+                        <dd class="col-sm-8">@Model.InternalCode</dd>
+                        <dt class="col-sm-4">@Html.DisplayNameFor(model => model.InternationalCode)</dt>
+                        <dd class="col-sm-8">@Model.InternationalCode</dd>
+                        <dt class="col-sm-4"></dt>
+                        <dd class="col-sm-8">
+                            <a href="@Model.Url" target="_blank" class="btn btn-sm btn-danger float-left">Show Protocol</a>
+                        </dd>
+
+                    </dl>
+                }
+            </div>
+            <!-- /.card-body -->
+            @if (!Model.IsEmpty)
+            {
+                <div class="card-footer">
+                    <a asp-action="AssignProtocol"
+                       asp-route-userId="@ViewBag.userId"
+                       asp-route-medicalTeamId="@ViewBag.medicalTeamId" 
+                       class="btn btn-success float-right">Update</a>
+                </div>
+            }
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    <!-- Select2 -->
+    <script src="~/lib/select2/js/select2.full.min.js"></script>
+
+    <script>$(function () {
+
+            $('.select2').select2();
+
+            $('.select2bs4').select2({
+                theme: 'bootstrap4'
+            });
+
+            $(".select2bs4").change(function () {
+                $('#projectSelectForm').submit();
+            });
+
+        });</script>
+
+
+}

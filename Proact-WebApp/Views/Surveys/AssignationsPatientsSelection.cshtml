@@ -1,0 +1,75 @@
+﻿@model SurveyAssignationsRequest
+@{
+    ViewData["Title"] = "Patients assignments";
+}
+
+<form method="post" asp-action="AssignationsPatients" class="form-horizontal">
+    <input type="hidden" asp-for="StartTime" />
+    <input type="hidden" asp-for="ExpireTime" />
+    <input type="hidden" asp-for="Reccurence" />
+    <input type="hidden" asp-for="SurveyId" />
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Select patients</h3>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <table id="UsersTable" class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Patient
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < Model.Users.Count; i++)
+                            {
+                                <tr>
+                                    <td>
+                                        <input type="hidden" asp-for="Users[i].UserModel.UserId" />
+                                        <div class="icheck-primary d-inline ml-2">
+                                            <input type="checkbox" asp-for="Users[i].Selected">
+                                            <label for="todoCheck1"></label>
+                                        </div>
+
+                                        @Html.DisplayFor(modelItem => Model.Users[i].UserModel.Name)
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- /.card-body -->
+
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-success float-right">Assign survey to patients</button>
+                    <a asp-action="AssignationsConfigurations" asp-route-id="@Model.SurveyId" class="btn btn-default float-left">Back</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <!-- DataTables  & Plugins -->
+    <script src="~/lib/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/lib/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/lib/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/lib/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <!-- Select2 -->
+    <script src="~/lib/select2/js/select2.full.min.js"></script>
+
+    <script>$(function () {
+            $("#UsersTable").DataTable({
+                "responsive": true, "lengthChange": false, "autoWidth": false
+
+            });
+
+           
+
+        });</script>
+}

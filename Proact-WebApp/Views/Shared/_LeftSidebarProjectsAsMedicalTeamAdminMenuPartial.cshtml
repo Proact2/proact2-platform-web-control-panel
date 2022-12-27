@@ -1,0 +1,34 @@
+﻿<li class="nav-header">STUDIES</li>
+
+<li class="nav-item">
+    <a asp-controller="MedicalTeamPatients"
+       asp-action="Index"
+       asp-route-medicalTeamId=""
+       class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "MedicalTeamPatients" ? "active" : "")">
+        <i class="fas fa-hospital-user nav-icon"></i>
+        <p>Patients</p>
+    </a>
+</li>
+
+<li class="nav-item">
+    <a asp-controller="Protocols"
+       asp-action="Index"
+       class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Protocols" ? "active" : "")">
+        <i class="nav-icon fas fa-file-alt"></i>
+        <p>
+            Protocols
+        </p>
+    </a>
+</li>
+
+
+<li class="nav-item">
+    <a asp-controller="Contact"
+       asp-action="Update"
+       class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Contact" ? "active" : "")">
+        <i class="nav-icon fas fa-info-circle"></i>
+        <p>
+            Contact page
+        </p>
+    </a>
+</li>

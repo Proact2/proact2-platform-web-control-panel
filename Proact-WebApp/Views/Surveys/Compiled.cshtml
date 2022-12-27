@@ -1,0 +1,84 @@
+﻿@model Proact_WebApp.Models.SurveyCompiledModel
+@{
+    ViewData["Title"] = "Answers";
+}
+<div class="row">
+    <div class="col-8">
+
+        @foreach (var question in Model.Questions)
+        {
+            <div class="callout callout-info px-3 py-1 m-1">
+                <div class="row my-2">
+                    <span class="badge bg-info">@question.Properties.Type</span>
+                </div>
+
+                <div class="row">
+                    <h6>@question.Title</h6>
+                </div>
+
+                <div class="row">
+                    <h7>@question.Question</h7>
+                </div>
+
+                <div>
+                    @if (question.Properties.Type == SurveyQuestionType.OpenAnswer)
+                    {
+                        <partial name="_surveyCompiledOpenQuestionPartial"
+                                 model="question" />
+                    }
+                    else if (question.Properties.Type == SurveyQuestionType.Mood)
+                    {
+                        <partial name="_surveyCompiledMoodQuestionPartial"
+                                 model="question" />
+                    }
+                    else if (question.Properties.Type == SurveyQuestionType.Boolean)
+                    {
+                        <partial name="_surveyCompiledBoolQuestionPartial"
+                                 model="question" />
+                    }
+                    else if (question.Properties.Type == SurveyQuestionType.SingleChoice)
+                    {
+                        <partial name="_surveyCompiledMultipleChoiceQuestionPartial"
+                                 model="question" />
+                    }
+                    else if (question.Properties.Type == SurveyQuestionType.MultipleChoice)
+                    {
+                        <partial name="_surveyCompiledMultipleChoiceQuestionPartial"
+                                 model="question" />
+                    }
+                    else if (question.Properties.Type == SurveyQuestionType.Rating)
+                    {
+                        <partial name="_surveyCompiledRatingQuestionPartial"
+                                 model="question" />
+                    }
+                </div>
+            </div>
+        }
+
+    </div>
+
+    <div class="col-4">
+        <div class="card card-info">
+            <div class="card-header">
+                <h3 class="card-title">Survey info</h3>
+            </div>
+
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-4">Title</dt>
+                    <dd class="col-sm-8">@Model.Title</dd>
+                    <dt class="col-sm-4">Description</dt>
+                    <dd class="col-sm-8">@Model.Description</dd>
+                    <dt class="col-sm-4">Version</dt>
+                    <dd class="col-sm-8">@Model.Version</dd>
+                </dl>
+            </div>
+
+            <div class="card-footer">
+                <a asp-action="PatientsAssigned"
+                   asp-route-id="@Model.Id"
+                   class="btn btn-default float-left">Back</a>
+            </div>
+        </div>
+    </div>
+</div>

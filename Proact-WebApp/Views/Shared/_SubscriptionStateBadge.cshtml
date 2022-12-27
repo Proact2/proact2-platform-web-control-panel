@@ -1,0 +1,13 @@
+﻿@model UserSubscriptionState
+@if (Model == UserSubscriptionState.Active)
+{
+    <span class="badge bg-success">  @Html.DisplayFor(modelItem => Model)</span>
+}
+else if (Model == UserSubscriptionState.Deactivated)
+{
+    <span class="badge bg-danger">  @Html.DisplayFor(modelItem => Model)</span>
+}
+else if (Model == UserSubscriptionState.Suspended)
+{
+    <span class="badge bg-warning">  @Html.DisplayFor(modelItem => Model)</span>
+}

@@ -1,0 +1,11 @@
+﻿@model SurveyCompiledQuestionModel
+@{
+    string value = "";
+    try {
+        value = Model.CompiledAnswers[0].Value;
+    }
+    catch ( Exception ) { }
+}
+<div class="shadow-none p-3 mb-5 bg-light rounded">
+    @value
+</div>

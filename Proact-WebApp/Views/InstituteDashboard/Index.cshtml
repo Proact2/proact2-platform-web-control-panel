@@ -1,0 +1,145 @@
+﻿@model InstituteDashboardModel
+@{
+    ViewData["Title"] = "Institute Dashboard";
+}
+
+<!-- Small boxes (Stat box) -->
+<div class="row">
+    <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-info">
+            <div class="inner">
+                <h3>@Model.CompletedServicePercentage<sup style="font-size: 20px">%</sup></h3>
+
+                <p>Completion <br />of the configuration</p>
+            </div>
+            <div class="icon">
+                <i class="ion ion-gear-b"></i>
+            </div>
+            <a href="#" class="small-box-footer"></a>
+        </div>
+    </div>
+    <!-- ./col -->
+    <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-success">
+            <div class="inner">
+                <h3>@Model.ProjectsCount</h3>
+
+                <p>Studies</p>
+            </div>
+            <div class="icon">
+                <i class="ion ion-android-document"></i>
+            </div>
+            <a asp-controller="Projects"
+               asp-action="Index"
+               class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+    <!-- ./col -->
+    <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-warning">
+            <div class="inner">
+                <h3>@Model.MedicalTeamsCount</h3>
+
+                <p>Medical Teams</p>
+            </div>
+            <div class="icon">
+                <i class="ion ion-ios-people"></i>
+            </div>
+            <a asp-controller="MedicalTeams"
+               asp-action="Index"
+               class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+    <!-- ./col -->
+    <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-danger">
+            <div class="inner">
+                <h3>@Model.MedicsCount</h3>
+
+                <p>Medics</p>
+            </div>
+            <div class="icon">
+                <i class="ion ion-person"></i>
+            </div>
+            <a asp-controller="Medics"
+               asp-action="Index"
+               class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+    <!-- ./col -->
+</div>
+
+<div>
+    <div class="progress progress-xs">
+        @if ( Model.CompletedServicePercentage == 100 ) {
+            <div class="progress-bar bg-success" style="width: @Model.CompletedServicePercentage%"></div>
+        }
+        else if ( Model.CompletedServicePercentage >= 50 ) {
+            <div class="progress-bar bg-warning" style="width: @Model.CompletedServicePercentage%"></div>
+        }
+        else {
+            <div class="progress-bar bg-danger" style="width: @Model.CompletedServicePercentage%"></div>
+        }
+
+    </div>
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Configurations tasks</h3>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body p-0">
+            <table class="table table-sm">
+                <thead>
+                    <tr>
+                        <th style="width: 10px">#</th>
+                        <th>Task</th>
+                        <th style="width: 300px">Progress</th>
+                        <th style="width: 150px">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var item in Model.ServicesConfigurationStatus)
+                    {
+                        <tr>
+                            <td>@item.Index.</td>
+                            <td>@item.Title</td>
+                            <td>
+                                @if (item.Completed)
+                                {
+
+                                    <div class="progress progress-xs">
+                                        <div class="progress-bar bg-success" style="width: 100%"></div>
+                                    </div>
+                                }
+                                else
+                                {
+
+                                    <div class="progress progress-xs">
+                                        <div class="progress-bar bg-danger" style="width: 5%"></div>
+                                    </div>
+                                }
+
+                            </td>
+                            <td>
+                                @if (!item.Completed)
+                                {
+                                    <a class="btn btn-sm btn-block  btn-success"
+                                       asp-action="@item.Action"
+                                       asp-controller="@item.Controller"
+                                       asp-route-id="@item.RouteId">Config</a>
+                                }
+
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <!-- /.card-body -->
+    </div>
+</div>

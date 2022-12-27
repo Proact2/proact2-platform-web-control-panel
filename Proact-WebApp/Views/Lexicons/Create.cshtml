@@ -1,0 +1,66 @@
+﻿@model Proact_WebApp.Models.LexiconFormCreateRequest
+@{
+    ViewData["Title"] = "Create new Lexicon";
+}
+
+<form asp-action="Create" method="post" class="form-horizontal" enctype="multipart/form-data">
+    <div class="row">
+        <div class="col-md-6">
+
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">New lexicon</h3>
+                </div>
+
+                <div class="card-body">
+
+
+                    <div class="form-group">
+                        <label asp-for="Name"></label>
+                        <input asp-for="Name" class="form-control">
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Description"></label>
+                        <input asp-for="Description" class="form-control">
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="ImportFile"></label>
+                        <div class="input-group">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" asp-for="ImportFile" />
+                                    <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+                                </div>
+                            </div>
+                        <span asp-validation-for="ImportFile" class="text-danger"></span>
+                        <div><small>(Supported files: .xlsx, .xls)</small></div>
+                        <div><small>Max file size: 10MB </small></div>
+                    </div>
+
+                </div>
+
+                <div class="card-footer">
+                    <button asp-action="Index" class="btn btn-default">Back</button>
+                    <button type="submit" class="btn btn-primary float-right">Create</button>
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+
+
+</form>
+
+@section Scripts {
+
+    <!-- bs-custom-file-input -->
+    <script src="~/lib/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+    <script>$(function () {
+            bsCustomFileInput.init();
+});</script>
+}

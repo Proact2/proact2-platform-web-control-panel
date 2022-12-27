@@ -1,0 +1,24 @@
+﻿@model SurveyCompiledQuestionModel;
+@{
+    var value = "0";
+    try {
+        value = Model.CompiledAnswers[0].Value;
+    }
+    catch ( Exception ) { }
+}
+
+
+<div class="shadow-none p-3 mb-5 bg-light rounded">
+    @if ( value == "0" ) {
+        <span class="m-10"><i class="fas fa-frown-open fa-3x" style="color: #D1898F"></i></span>
+    }
+    else if ( value == "1" ) {
+        <span class="m-10"><i class="fas fa-frown fa-3x" style="color: #EFE786"></i></span>
+    }
+    else if ( value == "2" ) {
+        <span class="m-10"><i class="fas fa-smile fa-3x" style="color: #95C5DF"></i></span>
+    }
+    else if ( value == "3" ) {
+        <span class="m-10"><i class="fas fa-grin fa-3x" style="color: #A5E08D"></i></span>
+    }
+</div>

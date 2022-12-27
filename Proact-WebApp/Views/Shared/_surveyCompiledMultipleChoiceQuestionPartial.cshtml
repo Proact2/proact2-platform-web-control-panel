@@ -1,0 +1,8 @@
+﻿@model SurveyCompiledQuestionModel
+
+<div class="shadow-none p-3 mb-5 bg-light rounded">
+    @foreach (var selectableAnswer in Model.CompiledAnswers )
+    {
+        <span class="d-block text-muted"><i class="far fa-dot-circle fa-1x"></i> @selectableAnswer.Value</span>
+    }
+</div>

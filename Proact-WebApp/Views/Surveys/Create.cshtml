@@ -1,0 +1,281 @@
+﻿@model Proact_WebApp.Models.SurveyCreateRequest
+@{
+    ViewData["Title"] = "Create a Survey";
+}
+
+<div class="row">
+    <div class="col-6">
+        <form asp-action="Create" method="get" id="questionSetSelectForm">
+            <input type="hidden" name="projectId" value="@Model.ProjectId" />
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Select a question set</label>
+                <div class="col-sm-8">
+                    <select name="questionSetId"
+                            class="form-control select2bs4"
+                            style="width: 100%;">
+                        @foreach (KeyValuePair<string, string> item in ViewBag.questionsSets)
+                        {
+                            @if (ViewBag.questionsSetId != null && ViewBag.questionsSetId == item.Key)
+                            {
+                                <option selected value="@item.Key"> @Html.DisplayFor(modelItem => item.Value)</option>
+                            }
+                            else
+                            {
+                                <option value="@item.Key"> @Html.DisplayFor(modelItem => item.Value)</option>
+                            }
+                        }
+                    </select>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-6"></div>
+
+</div>
+
+<form asp-action="Create" method="post" id="SurveyCreateForm" class="form-horizontal">
+    <div class="row">
+
+        <div class="col-md-12">
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Survey info</h3>
+                </div>
+
+
+                <div class="card-body">
+
+                    <input type="hidden" asp-for="QuestionsSetId" />
+                    <input type="hidden" asp-for="ProjectId" />
+
+                    <div class="form-group row">
+                        <label asp-for="Title" class="col-sm-2 col-form-label"></label>
+                        <div class="col-sm-10">
+                            <input asp-for="Title" class="form-control">
+                            <span asp-validation-for="Title" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label asp-for="Description" class="col-sm-2 col-form-label"></label>
+                        <div class="col-sm-10">
+                            <input asp-for="Description" class="form-control">
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label asp-for="Version" class="col-sm-2 col-form-label"></label>
+                        <div class="col-sm-10">
+                            <input asp-for="Version" class="form-control">
+                            <span asp-validation-for="Version" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Select the questions</h3>
+                </div>
+
+                <div class="card-body">
+                    <table id="SurveysTable" class="table">
+
+                        <thead>
+                        <tr>
+                            <th style="width: 50px">Select all</th>
+                            <th style="width: 100px">Type</th>
+                            <th>Question</th>
+                            <th>Answers</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach ( QuestionModel question in Model.Questions ) {
+
+                            <tr>
+                                <td>@question.Id</td>
+                                <td>
+                                    <small class="badge bg-info">@question.Properties.Type</small>
+                                </td>
+                                <td>
+                                    <div class="form-check">
+                                        <label class="form-check-label">
+
+                                            <strong class="d-block">@question.Title</strong>
+                                            <strong class="d-block text-muted">@question.Question</strong>
+
+                                        </label>
+                                    </div>
+
+                                </td>
+                                <td>
+                                    <div class="form-check">
+                                        @if ( question.Properties.Type == SurveyQuestionType.Mood ) {
+                                            <partial name="_surveysMoodQuestionDetailsPartial"/>
+                                        }
+                                        else if ( question.Properties.Type == SurveyQuestionType.Boolean ) {
+                                            <partial name="_surveysBoolQuestionDetailsPartial"/>
+                                        }
+                                        else if ( question.Properties.Type == SurveyQuestionType.SingleChoice ) {
+                                            var selectableAnswersContainer
+                                                = ( SurveysSingleChoiceQuestionModelAnswersContainer )question
+                                                    .AnswersContainer;
+
+                                            <partial name="_surveysSingleChoiceQuestionDetailsPartial" model="selectableAnswersContainer"/>
+                                        }
+                                        else if ( question.Properties.Type == SurveyQuestionType.MultipleChoice ) {
+                                            var selectableAnswersContainer
+                                                = ( SurveysMultipleChoiceQuestionModelAnswersContainer )question
+                                                    .AnswersContainer;
+
+                                            <partial name="_surveysMultipleChoiceQuestionDetailsPartial" model="selectableAnswersContainer"/>
+
+                                        }
+                                        else if ( question.Properties.Type == SurveyQuestionType.Rating ) {
+                                            var ratingProperties = ( SurveysRatingQuestionModelProperties )question.Properties;
+                                            <partial name="_surveysRatingQuestionDetailsPartial" model="ratingProperties"/>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="card col-12">
+            <div class="card-footer">
+                <button type="submit" class="btn btn-success float-right">Create</button>
+                <a asp-action="Index" class="btn btn-default float-left">Back</a>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+@section Scripts {
+
+    <!-- DataTables  & Plugins -->
+    <script src="~/lib/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/lib/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/lib/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/lib/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="~/lib/datatables/dataTables.select.js"></script>
+    <script src="~/lib/datatables/dataTables.checkboxes.min.js"></script>
+
+    <!-- jquery-validation -->
+    <script src="~/lib/jquery-validation/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation/additional-methods.min.js"></script>
+    <!-- Select2 -->
+    <script src="~/lib/select2/js/select2.full.min.js"></script>
+
+    <script>$(document).ready(function() {
+
+            var  table = $('#SurveysTable').DataTable( {
+                                  "responsive": true, 
+                                  "lengthChange": false, 
+                                  "autoWidth": false,
+                                   columnDefs: [ {
+                                       targets:   0,
+                                        'checkboxes': {
+                                            'selectRow': true
+                                    }
+                                   } ],
+                                   select: {
+                                       style:    'multi',
+                                       selector: 'td:first-child'
+                                   }
+                               } );
+            
+              $('#SurveysTable tbody').on('click', 'td:not(:first-child)', function() {
+                       var tr = $(this).closest('tr');
+                       if (tr.hasClass('selected')) {
+                         table.row( tr ).deselect();
+                       } else {
+                         table.row( tr ).select();
+                       }
+                     });
+            
+            $('#SurveyCreateForm').on('submit', function(e){
+                  var form = this;
+                  var rows_selected = table.column(0).checkboxes.selected();
+                  
+                  $.each(rows_selected, function(index, rowId){
+                     // Create a hidden element
+                     $(form).append(
+                         $('<input>')
+                            .attr('type', 'hidden')
+                            .attr('name', 'questionsIds[]')
+                            .val(rowId)
+                     );
+                     
+                  });
+               });
+
+
+            $('.select2').select2();
+
+            $('.select2bs4').select2({
+                theme: 'bootstrap4'
+            });
+
+            $(".select2bs4").change(function () {
+                $('#questionSetSelectForm').submit();
+            });
+
+        });</script>
+
+    <script>$(function () {
+
+
+            $('#SurveyCreateForm').validate({
+                rules: {
+                    Title: {
+                        required: true
+                    },
+                    Description: {
+                        required: true
+                    },
+                    Version: {
+                        required: true
+                    }
+                },
+                messages: {
+                    Title: {
+                        required: "Required field"
+                    },
+                    Description: {
+                        required: "Required field"
+                    },
+                    Version: {
+                        required: "Required field"
+                    }
+
+                },
+                errorElement: 'span',
+                errorPlacement: function (error, element) {
+                    error.addClass('invalid-feedback');
+                    element.closest('.form-group').append(error);
+                },
+                highlight: function (element, errorClass, validClass) {
+                    $(element).addClass('is-invalid');
+                },
+                unhighlight: function (element, errorClass, validClass) {
+                    $(element).removeClass('is-invalid');
+                }
+            });
+
+
+
+        });</script>
+}

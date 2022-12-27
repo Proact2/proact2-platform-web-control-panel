@@ -1,0 +1,64 @@
+﻿@model Proact_WebApp.Models.CreateInstituteDocumentRequest
+
+@{
+    ViewData["Title"] = "Update Privacy policy";
+}
+
+<form asp-action="Update" method="post" class="form-horizontal" enctype="multipart/form-data">
+    <div class="row">
+        <div class="col-md-6">
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Privacy policy</h3>
+                </div>
+
+                <div class="card-body">
+
+                    <div class="form-group">
+                        <label asp-for="Title"></label>
+                        <input asp-for="Title" class="form-control">
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Description"></label>
+                        <div><small>Appears in the mobile app when the patient logs in for the first time.</small></div>
+                        <textarea class="form-control" rows="3" asp-for="Description"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="PdfFile"></label>
+                        <div><small>Available in the mobile app when the patient logs in for the first time.</small></div>
+                        <div class="input-group">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" asp-for="PdfFile">
+                                <label class="custom-file-label" asp-for="PdfFile">Choose file</label>
+                            </div>
+                        </div>
+                        <span asp-validation-for="PdfFile" class="text-danger"></span>
+                        <div><small>Supported files: .pdf </small></div>
+                        <div><small>Max file size: 10MB </small></div>
+                    </div>
+
+                </div>
+
+                <div class="card-footer">
+                    <button asp-action="Index" class="btn btn-default">Back</button>
+                    <button type="submit" class="btn btn-success float-right">Update</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+
+    <!-- bs-custom-file-input -->
+    <script src="~/lib/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+    <script>$(function () {
+            bsCustomFileInput.init();
+});</script>
+}

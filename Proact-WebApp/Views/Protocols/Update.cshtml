@@ -1,0 +1,68 @@
+﻿@model CreateProtocolAssignedToProjectRequest
+@{
+    ViewData["Title"] = "Update protocol";
+}
+
+<form asp-action="Update" method="post" class="form-horizontal" enctype="multipart/form-data">
+    <div class="row">
+        <div class="col-md-6">
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Protocol</h3>
+                </div>
+
+                <div class="card-body">
+
+                    <div class="form-group">
+                        <label asp-for="Name"></label>
+                        <input asp-for="Name" class="form-control">
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="InternalCode"></label>
+                        <input asp-for="InternalCode" class="form-control">
+                        <span asp-validation-for="InternalCode" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="InternationalCode"></label>
+                        <input asp-for="InternationalCode" class="form-control">
+                        <span asp-validation-for="InternationalCode" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="PdfFile"></label>
+                        <div class="input-group">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" asp-for="PdfFile">
+                                <label class="custom-file-label" asp-for="PdfFile">Choose file</label>
+                            </div>
+                        </div>
+                        <span asp-validation-for="PdfFile" class="text-danger"></span>
+                        <div><small>Supported files: .pdf </small></div>
+                        <div><small>Max file size: 10MB </small></div>
+                    </div>
+
+                    <input type="hidden" asp-for="ProjectId" />
+
+                </div>
+
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-success float-right">Update</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+
+    <!-- bs-custom-file-input -->
+    <script src="~/lib/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+    <script>$(function () {
+            bsCustomFileInput.init();
+});</script>
+}

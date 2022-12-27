@@ -1,0 +1,138 @@
+﻿@model Proact_WebApp.AssignUserToMedicalTeamRequest
+@{
+    ViewData["Title"] = "Associate a Nurse with the Study";
+}
+
+<div class="row">
+
+    <div class="col-md-8">
+
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Select Study and Nurse</h3>
+            </div>
+
+            <form asp-action="Associate" id="UserCreateForm" class="form-horizontal">
+                <div class="card-body">
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">Study</label>
+                        <div class="col-sm-10">
+                            <select asp-for="MedicalTeamId"
+                                    data-placeholder="Select a Study"
+                                    class="form-control select2bs4">
+                                @foreach (MedicalTeamModel item in ViewBag.medicalTeams)
+                                {
+                                    @if (ViewBag.medicalTeamId != null && item.MedicalTeamId.ToString() == ViewBag.medicalTeamId)
+                                    {
+                                        <option value="@item.MedicalTeamId"> @Html.DisplayFor(modelItem => item.Project.Name) [ Medical Team: @Html.DisplayFor(modelItem => item.Name)]</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.MedicalTeamId"> @Html.DisplayFor(modelItem => item.Project.Name) [Medical Team: @Html.DisplayFor(modelItem => item.Name)]</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">Nurse</label>
+                        <div class="col-sm-10">
+                            <select asp-for="UserId"
+                                    data-placeholder="Select a nurse"
+                                    class="form-control select2bs4">
+                                @foreach (NurseModel item in ViewBag.nurses)
+                                {
+                                    @if (ViewBag.userId != null && item.UserId.ToString() == ViewBag.userId)
+                                    {
+                                        <option selected value="@item.UserId"> @Html.DisplayFor(modelItem => item.Name)</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.UserId"> @Html.DisplayFor(modelItem => item.Name)</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-success float-right">Add</button>
+                    <a asp-action="Index" asp-route-medicalTeamId="@ViewBag.medicalTeamId" class="btn btn-default float-left">Back</a>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    <!-- jquery-validation -->
+    <script src="~/lib/jquery-validation/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation/additional-methods.min.js"></script>
+    <!-- Select2 -->
+    <script src="~/lib/select2/js/select2.full.min.js"></script>
+    <!-- InputMask -->
+    <script src="~/lib/moment/moment.min.js"></script>
+    <script src="~/lib/inputmask/jquery.inputmask.min.js"></script>
+
+    <script>$(function () {
+
+            $('.select2').select2();
+
+            $('.select2bs4').select2({
+                theme: 'bootstrap4'
+            });
+
+    $('#birthyear').inputmask()
+            $('#treatmentStartDate').inputmask()
+            @*$('[data-mask]').inputmask()*@
+
+            $('#UserCreateForm').validate({
+                rules: {
+                    FirstName: {
+                        required: true
+                    },
+                    LastName: {
+                        required: true
+                    },
+                    Email: {
+                        required: true,
+                        email: true
+                    }
+                },
+                messages: {
+                    FirstName: {
+                        required: "Required field"
+                    },
+                    LastName: {
+                        required: "Required field"
+                    },
+                    Email: {
+                        required: "Required field",
+                        email: "Invalid email address"
+                    }
+                },
+                errorElement: 'span',
+                errorPlacement: function (error, element) {
+                    error.addClass('invalid-feedback');
+                    element.closest('.form-group').append(error);
+                },
+                highlight: function (element, errorClass, validClass) {
+                    $(element).addClass('is-invalid');
+                },
+                unhighlight: function (element, errorClass, validClass) {
+                    $(element).removeClass('is-invalid');
+                }
+            });
+
+
+
+        });</script>
+}

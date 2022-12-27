@@ -1,0 +1,50 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.809.5
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Proact-WebApp", "Proact-WebApp.csproj", "{96B097FB-A36B-40AB-8E19-6FCA906FCF8A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{96B097FB-A36B-40AB-8E19-6FCA906FCF8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96B097FB-A36B-40AB-8E19-6FCA906FCF8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96B097FB-A36B-40AB-8E19-6FCA906FCF8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96B097FB-A36B-40AB-8E19-6FCA906FCF8A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C57644CC-DB1E-4859-A917-69C51F663085}
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		Policies = $0
+		$0.DotNetNamingPolicy = $1
+		$0.TextStylePolicy = $2
+		$2.FileWidth = 80
+		$2.TabsToSpaces = True
+		$2.scope = text/x-csharp
+		$0.CSharpFormattingPolicy = $3
+		$3.IndentSwitchCaseSection = False
+		$3.NewLinesForBracesInTypes = False
+		$3.NewLinesForBracesInMethods = False
+		$3.NewLinesForBracesInProperties = False
+		$3.NewLinesForBracesInAccessors = False
+		$3.NewLinesForBracesInAnonymousMethods = False
+		$3.NewLinesForBracesInControlBlocks = False
+		$3.NewLinesForBracesInAnonymousTypes = False
+		$3.NewLinesForBracesInObjectCollectionArrayInitializers = False
+		$3.NewLinesForBracesInLambdaExpressionBody = False
+		$3.SpaceWithinMethodDeclarationParenthesis = True
+		$3.SpaceWithinMethodCallParentheses = True
+		$3.SpaceWithinExpressionParentheses = True
+		$3.SpaceWithinCastParentheses = True
+		$3.SpaceWithinOtherParentheses = True
+		$3.scope = text/x-csharp
+	EndGlobalSection
+EndGlobal

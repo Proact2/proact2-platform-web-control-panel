@@ -1,0 +1,89 @@
+﻿@model Proact_WebApp.Models.HtmlContentRequest
+
+@{
+    ViewData["Title"] = "Contact page";
+}
+
+<div class="row mb-1">
+    <div class="col-12">
+        <form asp-action="Update" method="get" id="projectSelectForm">
+            <div class="row form-group">
+
+                <label for="projectIdSelect" class="col-sm-2 col-form-label">Select Study</label>
+
+                <div class="col-sm-4">
+                    <select name="id"
+                            id="projectIdSelect"
+                            class="form-control select2bs4"
+                            style="width: 100%;">
+                        @foreach (ProjectModel item in ViewBag.projects)
+                        {
+                            @if (ViewBag.selectedProject != null && ViewBag.selectedProject.ProjectId == item.ProjectId)
+                            {
+                                <option selected value="@item.ProjectId"> @Html.DisplayFor(modelItem => item.Name)</option>
+                            }
+                            else
+                            {
+                                <option value="@item.ProjectId"> @Html.DisplayFor(modelItem => item.Name)</option>
+                            }
+                        }
+                    </select>
+                </div>
+
+
+            </div>
+        </form>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Contact page</h3>
+            </div>
+
+            <form asp-action="Update" id="contactForm" class="form-horizontal">
+                <div class="card-body">
+
+                    <textarea asp-for="HtmlContent" id="summernote" rows="10">
+                    </textarea>
+
+                </div>
+
+                <input type="hidden" asp-for="ProjectId" />
+
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-success float-right">Save</button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    <!-- Summernote -->
+    <script src="~/lib/summernote/summernote-bs4.min.js"></script>
+    <!-- Select2 -->
+    <script src="~/lib/select2/js/select2.full.min.js"></script>
+
+    <script>$(function () {
+            // Summernote
+            $('#summernote').summernote({ height: 350, });
+
+            $('.select2').select2();
+
+            $('.select2bs4').select2({
+                theme: 'bootstrap4'
+            });
+
+            $(".select2bs4").change(function () {
+                $('#projectSelectForm').submit();
+            });
+        })</script>
+}

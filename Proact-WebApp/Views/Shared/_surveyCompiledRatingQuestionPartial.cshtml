@@ -1,0 +1,13 @@
+﻿@model SurveyCompiledQuestionModel
+@{
+    string formattedValue = "";
+    try {
+        var ratingProperties = ( SurveysRatingQuestionModelProperties )Model.Properties;
+        string value = Model.CompiledAnswers[0].Value;
+        formattedValue = $"{value}/{ratingProperties.Max}";
+    }
+    catch ( Exception ) {}
+}
+<div class="shadow-none p-3 mb-5 bg-light rounded">
+    <button class="btn btn-lg btn-outline-primary disabled">@formattedValue</button>
+</div>

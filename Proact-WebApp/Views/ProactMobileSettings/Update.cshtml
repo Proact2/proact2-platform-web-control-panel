@@ -1,0 +1,52 @@
+﻿@model Proact_WebApp.RequiredUpdateModel
+
+@{
+    ViewData["Title"] = "App settings";
+}
+
+<form asp-action="Update" class="form-horizontal">
+    <div class="row">
+        <div class="col-md-6">
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Last PROACT 2.0 required version</h3>
+                </div>
+
+                <div class="card-body">
+                    <div class="form-group">
+                        <label asp-for="AndroidLastBuildRequired"></label>
+                        <input asp-for="AndroidLastBuildRequired" class="form-control">
+                        <span asp-validation-for="AndroidLastBuildRequired" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="AndroidStoreUrl"></label>
+                        <input asp-for="AndroidStoreUrl" class="form-control">
+                        <span asp-validation-for="AndroidStoreUrl" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="IOSLastBuildRequired"></label>
+                        <input asp-for="IOSLastBuildRequired" class="form-control">
+                        <span asp-validation-for="IOSLastBuildRequired" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="IosStoreUrl"></label>
+                        <input asp-for="IosStoreUrl" class="form-control">
+                        <span asp-validation-for="IosStoreUrl" class="text-danger"></span>
+                    </div>
+
+                </div>
+
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-success float-right">Set</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</form>
+
+

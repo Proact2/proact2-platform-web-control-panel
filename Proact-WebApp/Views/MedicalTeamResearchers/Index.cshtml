@@ -1,0 +1,168 @@
+﻿@model IEnumerable<Proact_WebApp.ResearcherModel>
+@{
+    ViewData["Title"] = "Researchers";
+}
+
+<div class="row">
+    <div class="col-6">
+        <form asp-action="Index" method="get" id="medicalTeamSelectForm">
+            <div class="form-group row">
+                <label for="medicalTeamId" class="col-sm-4 col-form-label ">Filter by Study</label>
+                <div class="col-sm-8">
+                    <select name="medicalTeamId"
+                            id="medicalTeamId"
+                            class="form-control select2bs4">
+
+                        @foreach (MedicalTeamModel item in ViewBag.medicalTeams)
+                        {
+                            @if (ViewBag.medicalTeamId != null && ViewBag.medicalTeamId == item.MedicalTeamId.ToString())
+                            {
+                                <option selected value="@item.MedicalTeamId"> @Html.DisplayFor(modelItem => item.Project.Name) [ Medical team: @Html.DisplayFor(modelItem => item.Name) ]</option>
+                            }
+                            else
+                            {
+                                <option value="@item.MedicalTeamId"> @Html.DisplayFor(modelItem => item.Project.Name) [ Medical team: @Html.DisplayFor(modelItem => item.Name) ]</option>
+                            }
+                        }
+                    </select>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-1">
+    </div>
+    <div class="col-2">
+        <a class="btn btn-block btn-success btn-sm" asp-action="Create" asp-route-medicalTeamId="@ViewBag.medicalTeamId"><i class="fas fa-user-plus"></i> Create new</a>
+    </div>
+    <div class="col-3">
+        <a class="btn btn-outline-primary btn-sm" asp-action="Associate" asp-route-medicalTeamId="@ViewBag.medicalTeamId"><i class="fas fa-link"></i> Connects a researcher to a study</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Researchers</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <table id="UsersTable" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th style="width:300px">
+                                Id
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Name)
+                            </th>
+                            <th style="width: 100px">
+                                Action
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <div><small><strong>@Html.DisplayNameFor(model => model.UserId):</strong> @Html.DisplayFor(modelItem => item.UserId)</small></div>
+                                    <div><small><strong>@Html.DisplayNameFor(model => model.AccountId):</strong> @Html.DisplayFor(modelItem => item.AccountId)</small></div>
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                    <partial name="_SubscriptionStateBadge" model="item.State" />
+                                </td>
+                                <td>
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-default">Action</button>
+                                        <button type="button" class="btn btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown">
+                                            <span class="sr-only">Toggle Dropdown</span>
+                                        </button>
+                                        <div class="dropdown-menu" role="menu">
+
+                                            <a data-toggle="modal" data-target="#modal-default"
+                                               id="@item.UserId"
+                                               class="deleteItem dropdown-item">
+                                                Remove association
+                                            </a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.card-body -->
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-default">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Confirm</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Remove Researcher from study?</p>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                @using (Html.BeginForm("RemoveFromTeam", "MedicalTeamResearchers", FormMethod.Post))
+                {
+                    <input type="hidden" name="userId" id="userIdToRemove" />
+                    <input type="hidden" name="medicalTeamId" id="medicalTeamIdToRemoveFrom" value="@ViewBag.medicalTeamId" />
+                    <button id="btnContinueDelete" type="submit" class="btn btn-danger">Remove</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    <!-- DataTables  & Plugins -->
+    <script src="~/lib/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/lib/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/lib/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/lib/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="~/lib/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/lib/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/lib/jszip/jszip.min.js"></script>
+    <script src="~/lib/pdfmake/pdfmake.min.js"></script>
+    <script src="~/lib/pdfmake/vfs_fonts.js"></script>
+    <script src="~/lib/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/lib/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="~/lib/datatables-buttons/js/buttons.colVis.min.js"></script>
+    <!-- Select2 -->
+    <script src="~/lib/select2/js/select2.full.min.js"></script>
+
+    <script>$(function () {
+            $("#UsersTable").DataTable({
+                "responsive": true, "lengthChange": false, "autoWidth": false,
+                "buttons": ["excel", "pdf", "print"]
+            }).buttons().container().appendTo('#UsersTable_wrapper .col-md-6:eq(0)');
+
+            $('.select2').select2();
+
+            $('.select2bs4').select2({
+                theme: 'bootstrap4'
+            });
+
+            $(".select2bs4").change(function () {
+                $('#medicalTeamSelectForm').submit();
+            });
+
+        });</script>
+
+    <script>$('.deleteItem').click(function (e) {
+            var userId = $(this).attr('id');
+            $('#userIdToRemove').val(userId);
+
+        });</script>
+}

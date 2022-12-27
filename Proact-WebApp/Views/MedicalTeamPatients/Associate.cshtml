@@ -1,0 +1,149 @@
+﻿@model Proact_WebApp.AssignPatientToMedicalTeamRequest
+@{
+    ViewData["Title"] = "Associate a Patient with the Study";
+}
+
+<div class="row">
+
+    <div class="col-md-8">
+
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Select Study and Patient</h3>
+            </div>
+
+            <form asp-action="Associate" id="UserCreateForm" class="form-horizontal">
+                <div class="card-body">
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">Study</label>
+                        <div class="col-sm-10">
+                            <select asp-for="MedicalTeamId"
+                                    data-placeholder="Select a Study"
+                                    class="form-control select2bs4">
+                                @foreach (MedicalTeamModel item in ViewBag.medicalTeams)
+                                {
+                                    @if (ViewBag.medicalTeamId != null && item.MedicalTeamId.ToString() == ViewBag.medicalTeamId)
+                                    {
+                                        <option value="@item.MedicalTeamId"> @Html.DisplayFor(modelItem => item.Project.Name) [ Study: @Html.DisplayFor(modelItem => item.Name) ]</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.MedicalTeamId"> @Html.DisplayFor(modelItem => item.Project.Name) [ Study: @Html.DisplayFor(modelItem => item.Name) ]</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">Patient</label>
+                        <div class="col-sm-10">
+                            <select asp-for="UserId"
+                                    data-placeholder="Select a patient"
+                                    class="form-control select2bs4">
+                                @foreach (PatientModel item in ViewBag.patients)
+                                {
+                                    @if (ViewBag.userId != null && item.UserId.ToString() == ViewBag.userId)
+                                    {
+                                        <option selected value="@item.UserId">@Html.DisplayFor(modelItem => item.Name)</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.UserId"> @Html.DisplayFor(modelItem => item.Name)</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label asp-for="Code" class="col-sm-2 col-form-label"></label>
+                        <div class="col-sm-10">
+                            <input asp-for="Code" class="form-control">
+                            <span asp-validation-for="Code" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label asp-for="NullableTreatmentStartDate" class="col-sm-2 col-form-label"></label>
+                        <div class="col-sm-10">
+
+
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                </div>
+                                <input asp-for="NullableTreatmentStartDate"
+                                       type="date"
+                                       id="treatmentStartDate"
+                                       class="form-control"
+                                       data-inputmask-alias="datetime"
+                                       data-inputmask-inputformat="yyyy/mm/dd"
+                                       data-mask>
+                            </div>
+
+                            <span asp-validation-for="NullableTreatmentStartDate" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label asp-for="NullableTreatmentEndDate" class="col-sm-2 col-form-label"></label>
+                        <div class="col-sm-10">
+
+
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                </div>
+                                <input asp-for="NullableTreatmentEndDate"
+                                       type="date"
+                                       id="treatmentEndDate"
+                                       class="form-control"
+                                       data-inputmask-alias="datetime"
+                                       data-inputmask-inputformat="yyyy/mm/dd"
+                                       data-mask>
+                            </div>
+
+                            <span asp-validation-for="NullableTreatmentEndDate" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-success float-right">Associate</button>
+                    <a asp-action="Index" asp-route-medicalTeamId="@ViewBag.medicalTeamId" class="btn btn-default float-left">Back</a>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+
+
+</div>
+
+
+@section Scripts {
+
+    <!-- jquery-validation -->
+    <script src="~/lib/jquery-validation/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation/additional-methods.min.js"></script>
+    <!-- Select2 -->
+    <script src="~/lib/select2/js/select2.full.min.js"></script>
+    <!-- InputMask -->
+    <script src="~/lib/moment/moment.min.js"></script>
+    <script src="~/lib/inputmask/jquery.inputmask.min.js"></script>
+
+    <script>$(function () {
+
+            $('.select2').select2();
+
+            $('.select2bs4').select2({
+                theme: 'bootstrap4'
+            });
+
+
+        });</script>
+}

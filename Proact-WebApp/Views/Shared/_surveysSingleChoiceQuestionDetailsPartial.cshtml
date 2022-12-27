@@ -1,0 +1,8 @@
+﻿@model SurveysSingleChoiceQuestionModelAnswersContainer
+<div class="shadow-none p-3 mb-5 bg-light rounded">
+    @foreach ( SurveysSelectableAnswer selectableAnswer in Model.SelectableAnswers ) {
+        <span class="text-muted ml-2">
+            <i class="far fa-dot-circle fa-1x mr-1"></i>@selectableAnswer.Label
+        </span>
+    }
+</div>
